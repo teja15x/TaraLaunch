@@ -1,0 +1,19 @@
+{
+  "name": "Career Agent - AI Career Discovery",
+  "short_name": "Career Agent",
+  "description": "Discover your ideal career through fun assessment games powered by AI",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "orientation": "portrait-primary",
+  "categories": ["education", "productivity"],
+  "lang": "en-IN",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "64x64",
+      "type": "image/x-icon"
+    }
+  ]
+}
