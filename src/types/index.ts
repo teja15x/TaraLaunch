@@ -86,6 +86,14 @@ export interface CareerRecommendation {
   generated_at: string;
 }
 
+// Market Reality Profile
+export interface MarketProfile {
+  entry_cost: 'low' | 'medium' | 'high' | 'extreme';
+  time_to_yield_years: number;
+  demand_trend: 'oversupplied' | 'stable' | 'high_growth' | 'niche';
+  tier_3_starting_salary_inr?: number; // the starting salary if graduating from an average tier-3 college
+}
+
 // Career database entry (Indian careers)
 export interface CareerEntry {
   id: string;
@@ -95,6 +103,7 @@ export interface CareerEntry {
   riasec_profile: RiasecScores;
   gardner_profile: Record<keyof GardnerScores, number>;
   big_five_profile: BigFiveScores;
+  market_profile?: MarketProfile;
   education_path: string[];
   salary_range: { min: number; max: number; currency: string };
   growth_outlook: 'high' | 'medium' | 'low';
@@ -107,6 +116,7 @@ export interface CareerProfile {
   category: string;
   description: string;
   required_traits: Partial<TraitScores>;
+  market_profile?: MarketProfile;
   growth_outlook: 'high' | 'medium' | 'low';
   salary_range: string;
   required_skills: string[];
@@ -343,4 +353,25 @@ export interface CounselingState {
   total_turns: number;
   language: string;  // e.g., "te", "hi", "en-IN"
   age_tier: 'explorer' | 'discoverer' | 'navigator' | 'pivoter';
+}
+
+// ═══════════════════════════════════════════════════════════════
+// LAYER 1: STAGE DETECTION (Lifecycle Classification)
+// ═══════════════════════════════════════════════════════════════
+
+export enum StudentStage {
+  PRE_12TH = 'pre12th',
+  POST_12TH = 'post12th',
+  IN_COLLEGE = 'inCollege',
+  POST_COLLEGE = 'postCollege',
+  UNKNOWN = 'unknown',
+}
+
+export interface StageDetectionResult {
+  stage: StudentStage;
+  confidence: number; // 0-100
+  clarifyingQuestion?: string;
+  reasoning: string;
+  signalsFound: string[];
+  detectedAt: string;
 }

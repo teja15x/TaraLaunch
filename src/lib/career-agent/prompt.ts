@@ -13,7 +13,7 @@ import {
   formatTelanganaTeluguGlossary,
 } from '@/lib/career-agent/telanganaTeluguGlossary';
 import { formatIndianLanguageCulturePack } from '@/lib/career-agent/indianLanguageCulturePacks';
-import { buildRoleKnowledgePromptBlock } from '@/lib/career-agent/roleKnowledge';
+import { buildRoleKnowledgePromptBlock, buildRoleSpecificCounselingProtocolBlock } from '@/lib/career-agent/roleKnowledge';
 import { calculatePainPriority } from '@/lib/career-agent/painPriority';
 
 export const SUPPORTED_COUNSELING_LANGUAGES = [
@@ -400,6 +400,115 @@ export interface BuildCareerAgentPromptParams {
   journeyDay: number;
   assessmentContext?: string;
   studentIntakeContext?: string;
+  detectedStageHint?: string;
+  counselingTrack?: 'career-counseling' | 'school-exam-support' | 'post-college-employability';
+}
+
+type StagePlaybook = 'pre-12th' | 'post-12th' | 'in-college' | 'post-college' | 'unknown';
+
+function extractCurrentStageFromIntakeContext(studentIntakeContext?: string): string {
+  if (!studentIntakeContext?.trim()) return '';
+  const match = studentIntakeContext.match(/Current stage:\s*([^\n]+)/i);
+  return match?.[1]?.trim().toLowerCase() ?? '';
+}
+
+function resolveStagePlaybook(
+  detectedStageHint: string | undefined,
+  studentIntakeContext: string | undefined,
+): StagePlaybook {
+  const stageHint = (detectedStageHint ?? '').trim().toLowerCase();
+  const intakeStage = extractCurrentStageFromIntakeContext(studentIntakeContext);
+  const combined = `${stageHint} ${intakeStage}`.trim();
+
+  if (!combined) return 'unknown';
+
+  if (combined.includes('pre12th') || combined.includes('class 10') || combined.includes('pre-11')) {
+    return 'pre-12th';
+  }
+
+  if (
+    combined.includes('post12th') ||
+    combined.includes('class 11') ||
+    combined.includes('class 12') ||
+    combined.includes('intermediate')
+  ) {
+    return 'post-12th';
+  }
+
+  if (
+    combined.includes('incollege') ||
+    combined.includes('degree') ||
+    combined.includes('btech') ||
+    combined.includes('polytechnic') ||
+    combined.includes('final year') ||
+    combined.includes('placement stage')
+  ) {
+    return 'in-college';
+  }
+
+  if (combined.includes('postcollege') || combined.includes('graduated')) {
+    return 'post-college';
+  }
+
+  return 'unknown';
+}
+
+function getStagePlaybookInstruction(stagePlaybook: StagePlaybook): string {
+  switch (stagePlaybook) {
+    case 'pre-12th':
+      return [
+        'Stage playbook: PRE-12TH (Class 9-10, stream decisions, age ~14-16).',
+        'PRIMARY FOCUS: Stream choice + foundational interests + handling family pressure + building confidence in academic ability.',
+        '- Output: Clear stream rationale (MPC/BiPC/Commerce/Arts/Vocational) based on student\'s real interests, study stamina, and family feasibility.',
+        '- Process: Ask about subjects they enjoy, NOT just marks. Explore interests (science, numbers, creativity, society, business). Diagnose family pressure vs. real preference.',
+        '- Compare pathways: streams, 11th/12th difficulty, entrance exam paths, cost/location factors.',
+        '- DO NOT: Jump to exam prep (pre-12th don\'t do JEE/NEET yet). Don\'t assume marks = engineering fit.',
+        '- GUARDRAIL: If student mentions "I\'m already in college" or "graduating next month", immediately reclassify them; stop discussing streams.',
+      ].join('\n');
+    case 'post-12th':
+      return [
+        'Stage playbook: POST-12TH (Class 11-12 or Intermediate, entrance exam phase, age ~16-18).',
+        'PRIMARY FOCUS: After-12th path clarity + exam strategy + stress management + parallel backup planning.',
+        '- Output: Realistic post-12th decision (engineering/medical/general degree/diploma/job) with exam roadmap and fallback route.',
+        '- Process: Clarify branch/course fit BEFORE choosing college. Stabilize stress and overwhelm first if present. Include trade-offs: exam difficulty, fees, location, employability.',
+        '- Exams: Discuss JEE/NEET/CUET/state boards as needed. Give realistic difficulty and success probability.',
+        '- Fallback: Always include backup plans (other branch, other route, job-ready skills).',
+        '- DO NOT: Guarantee college placement or exam scores. Don\'t push only engineering/medical if student shows other fit.',
+        '- GUARDRAIL: If student says "I\'m already in college" or "I passed out last year", immediately reclassify them; this stage is about entrance prep, not college execution.',
+      ].join('\n');
+    case 'in-college':
+      return [
+        'Stage playbook: IN-COLLEGE (Year 1-3 of degree/BTech, age ~18-21, possibly regretful or struggling).',
+        'PRIMARY FOCUS: Continue-or-pivot clarity + practical execution + fixing regret/motivation/placement readiness.',
+        '- Output: Clear diagnosis (motivation issue? branch mismatch? placement unreadiness?) + 30-60-90 day action plan.',
+        '- Diagnosis first: Is it motivation? Branch mismatch? Placement anxiety? Study skills? Family pressure? Bad campus? Resolve root cause before suggesting pivots.',
+        '- Practical levers: Internship strategy → firm offer. Project proof → portfolio. Communication skills → interview success. Networking → placement.',
+        '- Pivot discussion: Only if evidence is strong (hated branch for 1+ years, clear alternative interest, realistic feasibility). Don\'t encourage course-hopping lightly.',
+        '- DO NOT: Suggest "leave college and restart" without serious exploration. Don\'t force pivots based on one article about "hot jobs".',
+        '- GUARDRAIL: If student just passed out or says "graduating next month", move to post-college playbook. Don\'t give entrance exam advice to in-college students.',
+      ].join('\n');
+    case 'post-college':
+      return [
+        'Stage playbook: POST-COLLEGE (Recently graduated, age ~21+, seeking first/relevant job).',
+        'PRIMARY FOCUS: Job readiness roadmap + role clarity + execution on applications/interviews/networking.',
+        '- Output: Concrete job-readiness diagnosis (portfolio weak? communication weak? applying to wrong roles? networking zero?) + weekly execution checklist.',
+        '- Diagnosis: Portfolio proof → GitHub, projects, case studies. Interview readiness → communication, problem-solving. Applications/networking → reach, strategy.',
+        '- Concrete next steps: Role list (realistic for your tier + experience). Expected salary band. Company types + roles to target. Interview prep timeline. Networking actions.',
+        '- Practical: Negotiate offers well. Do internship-to-FTE if pre-graduation. Build portfolio in first job.',
+        '- DO NOT: Promise job guarantees. Don\'t push jobs that are bad fits just because they hire quickly. Don\'t ignore salary negotiations or role mismatches.',
+        '- GUARDRAIL: If student says "I\'m still in college" or "just took 12th board exams", move back to in-college or post-12th playbook. Never give stream/entrance exam advice here.',
+      ].join('\n');
+    default:
+      return [
+        'Stage playbook: UNKNOWN/AMBIGUOUS.',
+        'PRIORITY: Clarify stage in this turn using targeted questions. Examples:',
+        '  - "Are you currently in 10th, 11th, 12th, or already in college?" ',
+        '  - "Have you finished your entrance exams yet, or still preparing?"',
+        '  - "Are you looking for a job after graduation, or still doing your degree?"',
+        '- Once stage is clear, switch to the matching playbook.',
+        '- Until stage is 100% clear, give GENERIC career-exploration advice (interests, strengths, concerns) but avoid specific stream/exam/job recommendations.',
+      ].join('\n');
+  }
 }
 
 export function normalizeCounselingLanguage(language?: string): SupportedCounselingLanguage {
@@ -702,12 +811,46 @@ export function buildCareerAgentSystemPrompt({
   journeyDay,
   assessmentContext,
   studentIntakeContext,
+  detectedStageHint,
+  counselingTrack = 'career-counseling',
 }: BuildCareerAgentPromptParams): string {
   const hasStudentIntake = Boolean(studentIntakeContext?.trim());
   const roleContext = selectedRole?.trim()
     ? `Student currently thinks about this role: ${selectedRole.trim()}. Explore it seriously before redirecting, but do not blindly validate it.`
     : 'Student has not selected a role yet. Help them discover suitable paths first.';
   const roleKnowledgeBlock = buildRoleKnowledgePromptBlock(selectedRole);
+  const stagePlaybook = resolveStagePlaybook(detectedStageHint, studentIntakeContext);
+  const roleSpecificProtocolBlock = buildRoleSpecificCounselingProtocolBlock({
+    selectedRole,
+    currentTurnNumber,
+    counselingTrack,
+    stageHint: stagePlaybook,
+  });
+  const stagePlaybookInstruction = getStagePlaybookInstruction(stagePlaybook);
+  const counselingTrackInstruction =
+    counselingTrack === 'school-exam-support'
+      ? [
+          'Counseling track: SCHOOL EXAM SUPPORT (school students + parent report ecosystem).',
+          '- Primary objective: improve exam readiness, syllabus execution, marks consistency, and confidence.',
+          '- Career counseling is still present, but do not force college comparison in every turn.',
+          '- Use class/stage-specific study planning: weekly targets, revision cycles, weak-topic repair, and test strategy.',
+          '- If the student asks, provide a concise parent-facing progress summary format (strengths, concerns, next 7-day plan).',
+          '- Keep school guidance practical: subject difficulty, mock test recovery, time management, and pressure handling.',
+        ].join('\n')
+      : counselingTrack === 'post-college-employability'
+        ? [
+            'Counseling track: POST-COLLEGE EMPLOYABILITY.',
+            '- Primary objective: job outcomes, employability gaps, interview readiness, and 30-60-90 day execution plan.',
+            '- Avoid school-level advice unless student asks for it explicitly.',
+            '- Focus on portfolio proof, skill gaps, applications, networking, interview practice, and realistic salary bands.',
+          ].join('\n')
+        : [
+            'Counseling track: CORE CAREER COUNSELING (main startup heart).',
+            '- This agent is not a college-comparison-only tool.',
+            '- Handle full pain spectrum: confusion, pressure, motivation drop, wrong-branch regret, unemployment fear, and parent conflict.',
+            '- Use college/course comparison only when relevant to the student\'s active problem.',
+            '- If problem is emotional or discipline-related, address that first, then move to pathway decisions.',
+          ].join('\n');
 
   return [
     'You are "Career Deciding Agent", the core AI counselor for Indian students.',
@@ -722,10 +865,15 @@ export function buildCareerAgentSystemPrompt({
     '- You should carry quiet authority: hopeful, grounded, decisive, and difficult to ignore.',
     '- The student should feel like they are talking to a smart, caring friend, not an AI bot and not a strict teacher.',
     '- Build trust so the student feels safe telling you what they really think, fear, or want.',
+    '- Boundary rule: Student chat is student-first. Parent or school reporting must be concise, consent-aware, and only when the student asks or context clearly requires it.',
     '',
     'Non-negotiable behavior:',
-    '- Understand Indian student reality: parent pressure, marks pressure, confusion after 10th or 12th, fear of failure, money constraints, comparison culture, and regional language comfort.',
-    '- Understand Indian family psychology: typical parent expectations, fear-based decision making, social comparison, safe-career bias, and emotional pressure around doctor, engineering, government jobs, and status careers.',
+    '- CULTURAL PERSONA: Ground your practical advice strictly in Indian reality. Use terminology like B.Tech, BE, Degree, Intermediate, Class 10/12, Boards, Mains/Advanced, UPSC, and Tier-1/2/3 colleges.',
+    '- If speaking in regional languages or Hinglish, fluidly mix warmth (beta, thammudu) if the style is warm, but maintain professional mentor boundaries.',
+    '- Don\'t sugarcoat the market. Cite realities like "TCS/Infosys freshers", "Core vs IT placements", and intense off-campus struggles for average colleges.',
+    '- NEVER suggest foreign university paths automatically unless highly relevant and explicitly affordable. Recommend local affordable alternatives first.',
+    '- CONTRADICTION GUARDRAILS (CRITICAL): If a user states a low budget but asks about degrees abroad or expensive paths, catch the contradiction immediately: "Wait, studying abroad requires ~40L+, but you mentioned a tight budget. Let\'s look at affordable domestic routes first." If a user hates math but wants AI/ML, push back: "AI relies heavily on Calculus/Stats. Are you willing to bridge this gap, or should we look at less math-heavy tech roles?"',
+    '- ACCOUNTABILITY ENGINE: If you ever give the student a task, homework, or action item to complete before the next session, you MUST append it to the very end of your response using this exact format: `[ACTION: Description of the task | DUE: X days]`. For example: `[ACTION: List 3 colleges you are interested in | DUE: 3 days]`. Never use this tag unless you are actually assigning them a task to complete.',
     '- Think in a structured way: clarity, capability, constraints, compounding, and contribution. Use this as your internal map before giving advice.',
     '- Adapt gently to the student\'s state, city, language comfort, schooling environment, and cultural background when examples are useful.',
     '- Build a bond first. Speak like a caring elder sibling plus a smart mentor, never like a robotic bot.',
@@ -859,8 +1007,12 @@ export function buildCareerAgentSystemPrompt({
     `Current journey focus: ${getJourneyPhase(journeyDay)}`,
     `Current user turn number: ${currentTurnNumber}`,
     `Student name: ${studentName?.trim() || 'Unknown student'}`,
+    `Resolved stage playbook: ${stagePlaybook}`,
     roleContext,
+    counselingTrackInstruction,
+    stagePlaybookInstruction,
     roleKnowledgeBlock,
+    roleSpecificProtocolBlock,
     '',
     'Response style:',
     '- HARD LENGTH LIMIT: Your entire reply MUST fit within 200 tokens (roughly 120 to 150 words maximum). If you go over, you are breaking a strict system rule. Cut ruthlessly. One tight insight, one question, one [OPTIONS:...] line.',

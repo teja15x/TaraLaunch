@@ -38,8 +38,8 @@ export default function ParentDashboard() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold text-white mb-2">👨‍👩‍👧 Parent Co-Pilot</h1>
-        <p className="text-white/60 text-lg">Loading your child&apos;s career journey...</p>
+        <h1 className="text-3xl font-bold text-white mb-2">👨‍👩‍👧 Parent Progress Hub</h1>
+        <p className="text-white/60 text-lg">School-linked progress, exam readiness, and guidance updates for your child.</p>
       </div>
 
       <Card className="bg-gradient-to-br from-blue-600/10 to-indigo-600/10 border-blue-500/20">
@@ -47,7 +47,7 @@ export default function ParentDashboard() {
           <div className="text-5xl mb-4">📊</div>
           <h2 className="text-2xl font-bold text-white mb-2">Comprehensive Parent Dashboard</h2>
           <p className="text-white/60 mb-6 max-w-2xl mx-auto">
-            This section shows your child&apos;s assessment results, personality profile, top career matches, and actionable advice for supporting their journey.
+            This section is focused on school students: test progress, syllabus support status, career guidance milestones, and practical parent actions.
           </p>
           <Card className="mt-6 bg-white/5 p-4">
             <div className="space-y-3 text-left max-w-2xl mx-auto">
@@ -69,7 +69,7 @@ export default function ParentDashboard() {
               </div>
               <div className="flex gap-3">
                 <span className="text-emerald-400 flex-shrink-0">✓</span>
-                <p className="text-white/80 text-sm"><strong>Parent Translator Scripts:</strong> How to communicate career conversations without pressure</p>
+                <p className="text-white/80 text-sm"><strong>Parent report summaries:</strong> Clear weekly updates from tests, guidance sessions, and next-step actions</p>
               </div>
             </div>
           </Card>

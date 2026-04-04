@@ -6,7 +6,15 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "knowledge:seed:build": "tsc --pretty false --skipLibCheck --module NodeNext --moduleResolution NodeNext --target ES2022 --outDir .tmp-knowledge-seed scripts/build-role-seed.ts src/data/careerRoles.ts && node .tmp-knowledge-seed/scripts/build-role-seed.js",
+    "knowledge:seed:validate": "tsc --pretty false --skipLibCheck --module NodeNext --moduleResolution NodeNext --target ES2022 --outDir .tmp-knowledge-seed-validate scripts/validate-role-seed.ts src/lib/career-agent/knowledgeSchema.ts && node .tmp-knowledge-seed-validate/scripts/validate-role-seed.js",
+    "knowledge:seed:test": "tsc --pretty false --skipLibCheck --module NodeNext --moduleResolution NodeNext --target ES2022 --outDir .tmp-knowledge-seed-test scripts/test-knowledge-seed-pipeline.ts src/lib/career-agent/knowledgeSchema.ts && node .tmp-knowledge-seed-test/scripts/test-knowledge-seed-pipeline.js",
+    "prompt:verify": "node scripts/verify-prompt-integrity.mjs",
+    "prompt:lock": "node scripts/lock-prompt-brain.mjs",
+    "stage:test": "tsc --pretty false --skipLibCheck --module NodeNext --moduleResolution NodeNext --target ES2022 --outDir .tmp-stage-test scripts/test-stage-detection.ts src/lib/career-agent/stageDetection.ts && node .tmp-stage-test/scripts/test-stage-detection.js",
+    "stage:persist-test": "tsc --pretty false --skipLibCheck --module NodeNext --moduleResolution NodeNext --target ES2022 --outDir .tmp-stage-persist-test scripts/test-stage-persistence.ts src/lib/career-agent/stageDetection.ts && node .tmp-stage-persist-test/scripts/test-stage-persistence.js",
+    "recommendation:gate:test": "tsc --pretty false --skipLibCheck --module NodeNext --moduleResolution NodeNext --target ES2022 --outDir .tmp-recommendation-gate-test scripts/test-recommendation-gates.ts src/lib/career-agent/recommendationGate.ts && node .tmp-recommendation-gate-test/scripts/test-recommendation-gates.js"
   },
   "dependencies": {
     "@supabase/ssr": "^0.8.0",

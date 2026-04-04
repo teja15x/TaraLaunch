@@ -541,11 +541,9 @@ function getAdaptiveModuleRecommendations(
       "why-people-leave": [9],
     };
 
-    const gapModules = [
-      ...new Set(
-        misconceptions.flatMap((m) => moduleGaps[m] || [])
-      ),
-    ].sort();
+    const gapModules = Array.from(new Set(
+      misconceptions.flatMap((m) => moduleGaps[m] || [])
+    )).sort((a, b) => a - b);
 
     return {
       recommendedModules: gapModules.length > 0 ? gapModules : [5, 6, 7, 8, 9],

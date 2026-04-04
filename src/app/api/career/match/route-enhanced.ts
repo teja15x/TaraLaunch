@@ -76,7 +76,7 @@ export async function POST(request: NextRequest) {
     }
 
     // ---- MODE 3: ADVANCED MATCHING (Multi-dimensional) ----
-    if (useAdvanced || mode === 'advanced') {
+    if (useAdvanced || (mode as string) === 'advanced') {
       if (!traitScores) {
         return NextResponse.json({ error: 'Trait scores required' }, { status: 400 });
       }

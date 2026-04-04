@@ -5,13 +5,14 @@ import { Button } from '@/components/ui/Button';
 import { StatusBar } from '@/components/dashboard/StatusBar';
 import { PrimaryActionCard } from '@/components/dashboard/PrimaryActionCard';
 import { MechanicsOverview } from '@/components/dashboard/MechanicsOverview';
+import { AccountabilityWidget } from '@/components/dashboard/AccountabilityWidget';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 import Link from 'next/link';
 
 const NEXT_GAME = {
-  title: 'Pattern Master',
-  id: 'pattern-master',
+  gameTitle: 'Pattern Master',
+  gameId: 'pattern-master',
   description: 'Unlock logical thinking and spot connections others miss. Powers analytical careers.',
   skillsBuilt: ['Pattern Recognition', 'Logical Thinking', 'Problem Solving'],
   careerRelevance: 'Foundation for tech, engineering, and research roles',
@@ -64,8 +65,11 @@ export default function DashboardPage() {
         currentStreak={streakData.currentStreak}
         reliabilityScore={streakData.confidenceScore}
         gamesUntilUnlock={streakData.gamesUntilUnlock}
-        nextGameTitle={NEXT_GAME.title}
+        nextGameTitle={NEXT_GAME.gameTitle}
       />
+
+      {/* Accountability Task Engine */}
+      <AccountabilityWidget />
 
       {/* Primary Action */}
       <PrimaryActionCard {...NEXT_GAME} />

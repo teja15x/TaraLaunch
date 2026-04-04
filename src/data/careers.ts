@@ -1,8 +1,8 @@
-/**
+﻿/**
  * Comprehensive Career Database - Indian Education Context
  * 30+ careers with RIASEC, Gardner MI, and trait profiles
  */
-import type { RiasecScores, GardnerScores, TraitScores } from '@/types';
+import type { RiasecScores, GardnerScores, TraitScores, MarketProfile } from '@/types';        
 
 export interface CareerData {
   id: string;
@@ -12,6 +12,7 @@ export interface CareerData {
   riasec_profile: RiasecScores;
   gardner_profile: Record<keyof GardnerScores, number>;
   required_traits: Partial<TraitScores>;
+  market_profile?: MarketProfile;
   education_path: string[];
   salary_range: string;
   salary_range_inr: string;
@@ -21,7 +22,7 @@ export interface CareerData {
 }
 
 export const careerDatabase: CareerData[] = [
-  // ── TECHNOLOGY ──────────────────────────────────────
+  // â”€â”€ TECHNOLOGY â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   {
     id: 'software-engineer',
     title: 'Software Engineer',
@@ -30,9 +31,10 @@ export const careerDatabase: CareerData[] = [
     riasec_profile: { realistic: 60, investigative: 80, artistic: 30, social: 20, enterprising: 30, conventional: 50 },
     gardner_profile: { linguistic: 40, logical_mathematical: 90, spatial: 60, musical: 10, bodily_kinesthetic: 20, interpersonal: 40, intrapersonal: 50, naturalistic: 10 },
     required_traits: { analytical: 80, technical: 85, detail_oriented: 70, adaptability: 60 },
+    market_profile: { entry_cost: 'medium', time_to_yield_years: 4, demand_trend: 'oversupplied', tier_3_starting_salary_inr: 350000 },
     education_path: ['B.Tech/B.E. in CS/IT', 'BCA + MCA', 'Self-taught + coding bootcamp'],
     salary_range: '$20,000 - $80,000',
-    salary_range_inr: '₹6L - ₹40L per annum',
+    salary_range_inr: 'â‚¹6L - â‚¹40L per annum',
     growth_outlook: 'high',
     required_skills: ['Programming (Python/Java/JS)', 'Data Structures', 'System Design', 'Problem Solving'],
     related_careers: ['data-scientist', 'devops-engineer', 'product-manager'],
@@ -45,9 +47,10 @@ export const careerDatabase: CareerData[] = [
     riasec_profile: { realistic: 40, investigative: 90, artistic: 30, social: 20, enterprising: 30, conventional: 50 },
     gardner_profile: { linguistic: 40, logical_mathematical: 95, spatial: 60, musical: 10, bodily_kinesthetic: 10, interpersonal: 30, intrapersonal: 50, naturalistic: 15 },
     required_traits: { analytical: 90, technical: 80, detail_oriented: 75, creative: 50 },
+    market_profile: { entry_cost: 'medium', time_to_yield_years: 5, demand_trend: 'high_growth', tier_3_starting_salary_inr: 450000 },
     education_path: ['B.Tech + M.Tech in CS/Stats', 'B.Sc Stats + PG Diploma in Data Science', 'Online certifications + portfolio'],
     salary_range: '$25,000 - $70,000',
-    salary_range_inr: '₹8L - ₹35L per annum',
+    salary_range_inr: 'â‚¹8L - â‚¹35L per annum',
     growth_outlook: 'high',
     required_skills: ['Python/R', 'Machine Learning', 'Statistics', 'SQL', 'Data Visualization'],
     related_careers: ['software-engineer', 'ai-ml-engineer', 'business-analyst'],
@@ -60,9 +63,10 @@ export const careerDatabase: CareerData[] = [
     riasec_profile: { realistic: 50, investigative: 90, artistic: 20, social: 15, enterprising: 25, conventional: 40 },
     gardner_profile: { linguistic: 35, logical_mathematical: 95, spatial: 55, musical: 10, bodily_kinesthetic: 10, interpersonal: 25, intrapersonal: 50, naturalistic: 10 },
     required_traits: { analytical: 90, technical: 90, creative: 55, detail_oriented: 70 },
+    market_profile: { entry_cost: 'high', time_to_yield_years: 6, demand_trend: 'niche', tier_3_starting_salary_inr: 500000 },
     education_path: ['B.Tech + M.Tech in CS/AI', 'B.Sc Math + MS in AI', 'IIT/NIT CS programs'],
     salary_range: '$30,000 - $90,000',
-    salary_range_inr: '₹10L - ₹50L per annum',
+    salary_range_inr: 'â‚¹10L - â‚¹50L per annum',
     growth_outlook: 'high',
     required_skills: ['Deep Learning', 'Python', 'TensorFlow/PyTorch', 'MLOps', 'Mathematics'],
     related_careers: ['data-scientist', 'software-engineer', 'research-scientist'],
@@ -75,9 +79,10 @@ export const careerDatabase: CareerData[] = [
     riasec_profile: { realistic: 60, investigative: 80, artistic: 10, social: 20, enterprising: 30, conventional: 60 },
     gardner_profile: { linguistic: 30, logical_mathematical: 80, spatial: 40, musical: 5, bodily_kinesthetic: 15, interpersonal: 35, intrapersonal: 50, naturalistic: 5 },
     required_traits: { analytical: 85, technical: 80, detail_oriented: 85, adaptability: 65 },
+    market_profile: { entry_cost: 'low', time_to_yield_years: 4, demand_trend: 'high_growth', tier_3_starting_salary_inr: 400000 },
     education_path: ['B.Tech in CS/IT + CEH/CISSP', 'BCA + Security certifications', 'B.Sc IT + CompTIA Security+'],
     salary_range: '$18,000 - $60,000',
-    salary_range_inr: '₹5L - ₹30L per annum',
+    salary_range_inr: 'â‚¹5L - â‚¹30L per annum',
     growth_outlook: 'high',
     required_skills: ['Network Security', 'Ethical Hacking', 'Incident Response', 'SIEM Tools'],
     related_careers: ['software-engineer', 'devops-engineer'],
@@ -92,13 +97,13 @@ export const careerDatabase: CareerData[] = [
     required_traits: { creative: 85, empathy: 80, communication: 65, detail_oriented: 70 },
     education_path: ['B.Des in Interaction Design (NID/IIT)', 'BFA + UX bootcamp', 'Self-taught with strong portfolio'],
     salary_range: '$15,000 - $55,000',
-    salary_range_inr: '₹5L - ₹25L per annum',
+    salary_range_inr: 'â‚¹5L - â‚¹25L per annum',
     growth_outlook: 'high',
     required_skills: ['Figma/Sketch', 'User Research', 'Wireframing', 'Prototyping', 'Design Systems'],
     related_careers: ['graphic-designer', 'product-manager', 'frontend-developer'],
   },
 
-  // ── BUSINESS & MANAGEMENT ──────────────────────────
+  // â”€â”€ BUSINESS & MANAGEMENT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   {
     id: 'product-manager',
     title: 'Product Manager',
@@ -109,7 +114,7 @@ export const careerDatabase: CareerData[] = [
     required_traits: { leadership: 80, communication: 85, analytical: 70, empathy: 65 },
     education_path: ['B.Tech + MBA (IIM/ISB)', 'Engineering + APM programs', 'Any degree + product certifications'],
     salary_range: '$25,000 - $80,000',
-    salary_range_inr: '₹10L - ₹40L per annum',
+    salary_range_inr: 'â‚¹10L - â‚¹40L per annum',
     growth_outlook: 'high',
     required_skills: ['Strategy', 'Stakeholder Management', 'Data Analysis', 'User Research', 'Roadmapping'],
     related_careers: ['management-consultant', 'entrepreneur', 'business-analyst'],
@@ -124,7 +129,7 @@ export const careerDatabase: CareerData[] = [
     required_traits: { analytical: 80, communication: 85, leadership: 70, adaptability: 75 },
     education_path: ['MBA from IIM/ISB/top B-school', 'B.Tech + MBA', 'CA + MBA'],
     salary_range: '$20,000 - $70,000',
-    salary_range_inr: '₹8L - ₹35L per annum',
+    salary_range_inr: 'â‚¹8L - â‚¹35L per annum',
     growth_outlook: 'medium',
     required_skills: ['Strategy', 'Presentations', 'Problem Solving', 'Client Management', 'Excel'],
     related_careers: ['product-manager', 'entrepreneur', 'financial-analyst'],
@@ -138,8 +143,8 @@ export const careerDatabase: CareerData[] = [
     gardner_profile: { linguistic: 60, logical_mathematical: 50, spatial: 40, musical: 10, bodily_kinesthetic: 20, interpersonal: 80, intrapersonal: 70, naturalistic: 15 },
     required_traits: { leadership: 85, adaptability: 90, creative: 75, communication: 70 },
     education_path: ['Any degree + startup experience', 'MBA + incubator program', 'Drop out + hustle (not recommended!)'],
-    salary_range: '₹0 - Unlimited',
-    salary_range_inr: '₹0 - Unlimited (equity-based)',
+    salary_range: 'â‚¹0 - Unlimited',
+    salary_range_inr: 'â‚¹0 - Unlimited (equity-based)',
     growth_outlook: 'high',
     required_skills: ['Vision', 'Fundraising', 'Team Building', 'Resilience', 'Sales'],
     related_careers: ['product-manager', 'management-consultant', 'marketing-manager'],
@@ -154,7 +159,7 @@ export const careerDatabase: CareerData[] = [
     required_traits: { analytical: 80, communication: 70, detail_oriented: 80, technical: 50 },
     education_path: ['B.Com/BBA + MBA', 'B.Tech + business certifications', 'Any degree + CBAP certification'],
     salary_range: '$15,000 - $45,000',
-    salary_range_inr: '₹5L - ₹20L per annum',
+    salary_range_inr: 'â‚¹5L - â‚¹20L per annum',
     growth_outlook: 'medium',
     required_skills: ['SQL', 'Requirements Gathering', 'Process Mapping', 'Excel', 'Stakeholder Management'],
     related_careers: ['data-scientist', 'product-manager', 'management-consultant'],
@@ -169,13 +174,13 @@ export const careerDatabase: CareerData[] = [
     required_traits: { empathy: 80, communication: 80, leadership: 70, adaptability: 65 },
     education_path: ['MBA in HR (XLRI/TISS/IIM)', 'BA Psychology + PGDM HR', 'Any degree + SHRM certification'],
     salary_range: '$12,000 - $45,000',
-    salary_range_inr: '₹4L - ₹20L per annum',
+    salary_range_inr: 'â‚¹4L - â‚¹20L per annum',
     growth_outlook: 'medium',
     required_skills: ['Conflict Resolution', 'Recruiting', 'Employee Development', 'Policy Design', 'HRIS'],
     related_careers: ['clinical-psychologist', 'management-consultant', 'corporate-trainer'],
   },
 
-  // ── FINANCE & COMMERCE ─────────────────────────────
+  // â”€â”€ FINANCE & COMMERCE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   {
     id: 'chartered-accountant',
     title: 'Chartered Accountant (CA)',
@@ -184,9 +189,9 @@ export const careerDatabase: CareerData[] = [
     riasec_profile: { realistic: 20, investigative: 60, artistic: 5, social: 30, enterprising: 50, conventional: 90 },
     gardner_profile: { linguistic: 40, logical_mathematical: 85, spatial: 10, musical: 5, bodily_kinesthetic: 5, interpersonal: 40, intrapersonal: 40, naturalistic: 5 },
     required_traits: { analytical: 85, detail_oriented: 90, technical: 65, communication: 55 },
-    education_path: ['B.Com + CA Foundation + Intermediate + Final', 'After 12th Commerce: CA Foundation route', '10th → CA Foundation (post-reform)'],
+    education_path: ['B.Com + CA Foundation + Intermediate + Final', 'After 12th Commerce: CA Foundation route', '10th â†’ CA Foundation (post-reform)'],
     salary_range: '$10,000 - $60,000',
-    salary_range_inr: '₹7L - ₹30L per annum',
+    salary_range_inr: 'â‚¹7L - â‚¹30L per annum',
     growth_outlook: 'high',
     required_skills: ['Accounting Standards', 'Taxation', 'Auditing', 'Financial Analysis', 'Tally/SAP'],
     related_careers: ['financial-analyst', 'investment-banker', 'business-analyst'],
@@ -201,7 +206,7 @@ export const careerDatabase: CareerData[] = [
     required_traits: { analytical: 90, detail_oriented: 85, technical: 60, communication: 50 },
     education_path: ['B.Com/BBA + CFA', 'B.Tech + MBA Finance', 'B.Sc Economics + Masters in Finance'],
     salary_range: '$15,000 - $50,000',
-    salary_range_inr: '₹5L - ₹25L per annum',
+    salary_range_inr: 'â‚¹5L - â‚¹25L per annum',
     growth_outlook: 'medium',
     required_skills: ['Financial Modeling', 'Excel', 'Valuation', 'Bloomberg Terminal', 'Reporting'],
     related_careers: ['chartered-accountant', 'investment-banker', 'data-scientist'],
@@ -216,13 +221,13 @@ export const careerDatabase: CareerData[] = [
     required_traits: { analytical: 85, leadership: 75, communication: 80, detail_oriented: 80 },
     education_path: ['MBA from IIM A/B/C or ISB', 'B.Tech/B.Com + CFA + MBA', 'Top undergrad + analyst program'],
     salary_range: '$30,000 - $120,000',
-    salary_range_inr: '₹12L - ₹60L per annum',
+    salary_range_inr: 'â‚¹12L - â‚¹60L per annum',
     growth_outlook: 'medium',
     required_skills: ['Financial Modeling', 'Valuation', 'M&A', 'Pitchbook Creation', 'Negotiation'],
     related_careers: ['financial-analyst', 'management-consultant', 'chartered-accountant'],
   },
 
-  // ── HEALTHCARE ─────────────────────────────────────
+  // â”€â”€ HEALTHCARE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   {
     id: 'doctor-mbbs',
     title: 'Doctor (MBBS / MD)',
@@ -231,9 +236,9 @@ export const careerDatabase: CareerData[] = [
     riasec_profile: { realistic: 70, investigative: 80, artistic: 10, social: 70, enterprising: 30, conventional: 40 },
     gardner_profile: { linguistic: 50, logical_mathematical: 70, spatial: 60, musical: 5, bodily_kinesthetic: 70, interpersonal: 75, intrapersonal: 40, naturalistic: 40 },
     required_traits: { analytical: 80, empathy: 85, detail_oriented: 80, technical: 70 },
-    education_path: ['NEET → MBBS (5.5 yrs) → MD/MS (3 yrs)', 'NEET → AIIMS/JIPMER', 'MBBS → Super-specialization (DM/MCh)'],
+    education_path: ['NEET â†’ MBBS (5.5 yrs) â†’ MD/MS (3 yrs)', 'NEET â†’ AIIMS/JIPMER', 'MBBS â†’ Super-specialization (DM/MCh)'],
     salary_range: '$10,000 - $80,000',
-    salary_range_inr: '₹8L - ₹40L+ per annum',
+    salary_range_inr: 'â‚¹8L - â‚¹40L+ per annum',
     growth_outlook: 'high',
     required_skills: ['Clinical Diagnosis', 'Patient Communication', 'Medical Knowledge', 'Empathy', 'Decision Making'],
     related_careers: ['clinical-psychologist', 'pharmacist', 'biomedical-researcher'],
@@ -246,15 +251,15 @@ export const careerDatabase: CareerData[] = [
     riasec_profile: { realistic: 10, investigative: 70, artistic: 40, social: 90, enterprising: 20, conventional: 20 },
     gardner_profile: { linguistic: 70, logical_mathematical: 40, spatial: 15, musical: 15, bodily_kinesthetic: 10, interpersonal: 90, intrapersonal: 85, naturalistic: 10 },
     required_traits: { empathy: 90, communication: 80, analytical: 65, adaptability: 60 },
-    education_path: ['BA Psychology → MA Clinical Psychology → MPhil (RCI)', 'B.Sc Psychology → M.Sc → PhD', 'TISS/Delhi University/NIMHANS programs'],
+    education_path: ['BA Psychology â†’ MA Clinical Psychology â†’ MPhil (RCI)', 'B.Sc Psychology â†’ M.Sc â†’ PhD', 'TISS/Delhi University/NIMHANS programs'],
     salary_range: '$8,000 - $35,000',
-    salary_range_inr: '₹4L - ₹18L per annum',
+    salary_range_inr: 'â‚¹4L - â‚¹18L per annum',
     growth_outlook: 'high',
     required_skills: ['Active Listening', 'CBT/DBT Therapy', 'Assessment Tools', 'Empathy', 'Case Formulation'],
     related_careers: ['doctor-mbbs', 'human-resources', 'counselor'],
   },
 
-  // ── ENGINEERING ────────────────────────────────────
+  // â”€â”€ ENGINEERING â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   {
     id: 'mechanical-engineer',
     title: 'Mechanical Engineer',
@@ -265,7 +270,7 @@ export const careerDatabase: CareerData[] = [
     required_traits: { technical: 85, analytical: 80, detail_oriented: 80, creative: 55 },
     education_path: ['B.Tech/B.E. Mechanical (IIT/NIT)', 'Diploma + B.Tech lateral', 'M.Tech for specialization'],
     salary_range: '$8,000 - $40,000',
-    salary_range_inr: '₹4L - ₹20L per annum',
+    salary_range_inr: 'â‚¹4L - â‚¹20L per annum',
     growth_outlook: 'medium',
     required_skills: ['CAD (SolidWorks/AutoCAD)', 'Thermodynamics', 'Materials Science', 'Manufacturing', 'FEA'],
     related_careers: ['civil-engineer', 'aerospace-engineer', 'automotive-designer'],
@@ -280,13 +285,13 @@ export const careerDatabase: CareerData[] = [
     required_traits: { technical: 80, analytical: 75, detail_oriented: 85, leadership: 55 },
     education_path: ['B.Tech Civil Engineering', 'Diploma + B.Tech lateral entry', 'M.Tech Structural/Environmental'],
     salary_range: '$6,000 - $35,000',
-    salary_range_inr: '₹3.5L - ₹18L per annum',
+    salary_range_inr: 'â‚¹3.5L - â‚¹18L per annum',
     growth_outlook: 'medium',
     required_skills: ['AutoCAD', 'Structural Analysis', 'Project Management', 'Site Supervision', 'STAAD Pro'],
     related_careers: ['mechanical-engineer', 'architect', 'urban-planner'],
   },
 
-  // ── CREATIVE & MEDIA ──────────────────────────────
+  // â”€â”€ CREATIVE & MEDIA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   {
     id: 'graphic-designer',
     title: 'Graphic Designer',
@@ -297,7 +302,7 @@ export const careerDatabase: CareerData[] = [
     required_traits: { creative: 90, detail_oriented: 75, communication: 55, technical: 50 },
     education_path: ['B.Des (NID/NIFT/Srishti)', 'BFA in Applied Art', 'Self-taught + portfolio + certifications'],
     salary_range: '$6,000 - $30,000',
-    salary_range_inr: '₹3L - ₹15L per annum',
+    salary_range_inr: 'â‚¹3L - â‚¹15L per annum',
     growth_outlook: 'medium',
     required_skills: ['Adobe Creative Suite', 'Typography', 'Color Theory', 'Brand Identity', 'Layout Design'],
     related_careers: ['ui-ux-designer', 'content-creator', 'animator'],
@@ -312,7 +317,7 @@ export const careerDatabase: CareerData[] = [
     required_traits: { creative: 85, communication: 85, adaptability: 75, empathy: 55 },
     education_path: ['B.A. Mass Communication/Journalism', 'BMM + digital marketing course', 'Any degree + self-built audience'],
     salary_range: '$5,000 - $40,000',
-    salary_range_inr: '₹3L - ₹20L per annum',
+    salary_range_inr: 'â‚¹3L - â‚¹20L per annum',
     growth_outlook: 'high',
     required_skills: ['Content Strategy', 'SEO', 'Video Editing', 'Social Media', 'Copywriting'],
     related_careers: ['graphic-designer', 'marketing-manager', 'journalist'],
@@ -327,7 +332,7 @@ export const careerDatabase: CareerData[] = [
     required_traits: { communication: 90, analytical: 70, adaptability: 75, empathy: 65 },
     education_path: ['B.A. Journalism (IIMC/AJK MCRC)', 'BMM/BJMC + internships', 'Any degree + journalism diploma'],
     salary_range: '$5,000 - $25,000',
-    salary_range_inr: '₹3L - ₹12L per annum',
+    salary_range_inr: 'â‚¹3L - â‚¹12L per annum',
     growth_outlook: 'medium',
     required_skills: ['Writing', 'Research', 'Interviewing', 'Ethics', 'Multimedia Production'],
     related_careers: ['content-creator', 'author-writer', 'public-relations'],
@@ -342,13 +347,13 @@ export const careerDatabase: CareerData[] = [
     required_traits: { creative: 90, technical: 70, detail_oriented: 80, adaptability: 50 },
     education_path: ['B.Sc Animation (Arena/MAAC)', 'B.Des in Animation (NID)', 'B.F.A. + VFX certification'],
     salary_range: '$6,000 - $35,000',
-    salary_range_inr: '₹3L - ₹18L per annum',
+    salary_range_inr: 'â‚¹3L - â‚¹18L per annum',
     growth_outlook: 'high',
     required_skills: ['Maya/Blender', 'After Effects', 'Storyboarding', '3D Modeling', 'Motion Graphics'],
     related_careers: ['graphic-designer', 'game-developer', 'ui-ux-designer'],
   },
 
-  // ── LAW & GOVERNANCE ──────────────────────────────
+  // â”€â”€ LAW & GOVERNANCE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   {
     id: 'lawyer',
     title: 'Lawyer / Advocate',
@@ -359,7 +364,7 @@ export const careerDatabase: CareerData[] = [
     required_traits: { analytical: 80, communication: 90, leadership: 65, detail_oriented: 75 },
     education_path: ['5-year integrated BA LLB (NLU/CLAT)', '3-year LLB after graduation', 'LLM for specialization'],
     salary_range: '$6,000 - $50,000',
-    salary_range_inr: '₹3.5L - ₹25L per annum',
+    salary_range_inr: 'â‚¹3.5L - â‚¹25L per annum',
     growth_outlook: 'medium',
     required_skills: ['Legal Research', 'Argumentation', 'Drafting', 'Client Counseling', 'Court Procedures'],
     related_careers: ['civil-services', 'corporate-lawyer', 'journalist'],
@@ -374,13 +379,13 @@ export const careerDatabase: CareerData[] = [
     required_traits: { leadership: 85, analytical: 75, communication: 80, empathy: 70 },
     education_path: ['Any graduation + UPSC CSE (Prelims + Mains + Interview)', 'Optional: MA/MSc for subject expertise', 'Coaching + 2-3 years preparation'],
     salary_range: '$10,000 - $30,000',
-    salary_range_inr: '₹6L - ₹18L per annum (+ perks & housing)',
+    salary_range_inr: 'â‚¹6L - â‚¹18L per annum (+ perks & housing)',
     growth_outlook: 'medium',
     required_skills: ['General Studies', 'Essay Writing', 'Decision Making', 'Ethics', 'Public Administration'],
     related_careers: ['lawyer', 'economist', 'policy-researcher'],
   },
 
-  // ── EDUCATION & RESEARCH ──────────────────────────
+  // â”€â”€ EDUCATION & RESEARCH â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   {
     id: 'teacher-professor',
     title: 'Teacher / Professor',
@@ -391,7 +396,7 @@ export const careerDatabase: CareerData[] = [
     required_traits: { communication: 85, empathy: 80, analytical: 60, adaptability: 65 },
     education_path: ['B.Ed + any graduation', 'MA/M.Sc + NET/SET for college', 'PhD for university professor'],
     salary_range: '$4,000 - $30,000',
-    salary_range_inr: '₹3L - ₹15L per annum',
+    salary_range_inr: 'â‚¹3L - â‚¹15L per annum',
     growth_outlook: 'medium',
     required_skills: ['Subject Expertise', 'Pedagogy', 'Communication', 'Patience', 'Assessment Design'],
     related_careers: ['clinical-psychologist', 'research-scientist', 'corporate-trainer'],
@@ -406,13 +411,13 @@ export const careerDatabase: CareerData[] = [
     required_traits: { analytical: 90, detail_oriented: 85, creative: 60, technical: 70 },
     education_path: ['B.Sc + M.Sc + PhD (IISc/TIFR/IIT)', 'Integrated MS-PhD programs', 'CSIR-NET/GATE for fellowships'],
     salary_range: '$8,000 - $35,000',
-    salary_range_inr: '₹5L - ₹18L per annum',
+    salary_range_inr: 'â‚¹5L - â‚¹18L per annum',
     growth_outlook: 'medium',
     required_skills: ['Research Methodology', 'Data Analysis', 'Scientific Writing', 'Lab Techniques', 'Critical Thinking'],
     related_careers: ['data-scientist', 'teacher-professor', 'ai-ml-engineer'],
   },
 
-  // ── ARCHITECTURE & PLANNING ───────────────────────
+  // â”€â”€ ARCHITECTURE & PLANNING â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   {
     id: 'architect',
     title: 'Architect',
@@ -423,13 +428,13 @@ export const careerDatabase: CareerData[] = [
     required_traits: { creative: 85, technical: 75, detail_oriented: 80, analytical: 65 },
     education_path: ['B.Arch (5 years) via NATA/JEE', 'SPA Delhi / IIT Kharagpur / CEPT', 'M.Arch for specialization'],
     salary_range: '$6,000 - $35,000',
-    salary_range_inr: '₹4L - ₹18L per annum',
+    salary_range_inr: 'â‚¹4L - â‚¹18L per annum',
     growth_outlook: 'medium',
     required_skills: ['AutoCAD/Revit', 'Design Thinking', '3D Visualization', 'Building Codes', 'Sustainability'],
     related_careers: ['civil-engineer', 'ui-ux-designer', 'graphic-designer'],
   },
 
-  // ── MARKETING & SALES ─────────────────────────────
+  // â”€â”€ MARKETING & SALES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   {
     id: 'marketing-manager',
     title: 'Marketing Manager',
@@ -440,13 +445,13 @@ export const careerDatabase: CareerData[] = [
     required_traits: { creative: 80, communication: 85, leadership: 75, analytical: 60 },
     education_path: ['MBA in Marketing (IIM/MICA/XLRI)', 'BBA + MBA', 'Any degree + digital marketing certifications'],
     salary_range: '$12,000 - $50,000',
-    salary_range_inr: '₹5L - ₹25L per annum',
+    salary_range_inr: 'â‚¹5L - â‚¹25L per annum',
     growth_outlook: 'high',
     required_skills: ['Brand Strategy', 'Digital Marketing', 'Analytics', 'Team Leadership', 'Campaign Planning'],
     related_careers: ['content-creator', 'product-manager', 'entrepreneur'],
   },
 
-  // ── ENVIRONMENT & SUSTAINABILITY ──────────────────
+  // â”€â”€ ENVIRONMENT & SUSTAINABILITY â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   {
     id: 'environmental-scientist',
     title: 'Environmental Scientist',
@@ -457,13 +462,13 @@ export const careerDatabase: CareerData[] = [
     required_traits: { analytical: 75, detail_oriented: 70, technical: 65, empathy: 55 },
     education_path: ['B.Sc Environmental Science + M.Sc', 'B.Tech Environmental Engineering', 'PhD in Ecology/Environmental Studies'],
     salary_range: '$6,000 - $25,000',
-    salary_range_inr: '₹3L - ₹12L per annum',
+    salary_range_inr: 'â‚¹3L - â‚¹12L per annum',
     growth_outlook: 'high',
     required_skills: ['Field Research', 'GIS', 'Data Analysis', 'Environmental Impact Assessment', 'Policy Knowledge'],
     related_careers: ['research-scientist', 'urban-planner', 'sustainability-consultant'],
   },
 
-  // ── SPORTS & FITNESS ──────────────────────────────
+  // â”€â”€ SPORTS & FITNESS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   {
     id: 'sports-professional',
     title: 'Sports Professional / Coach',
@@ -474,13 +479,13 @@ export const careerDatabase: CareerData[] = [
     required_traits: { leadership: 65, adaptability: 80, communication: 55, empathy: 60 },
     education_path: ['B.P.Ed / M.P.Ed', 'Sports Authority of India (SAI) training', 'Diploma in Sports Coaching + NIS certification'],
     salary_range: '$3,000 - $50,000',
-    salary_range_inr: '₹2L - ₹25L per annum (varies widely)',
+    salary_range_inr: 'â‚¹2L - â‚¹25L per annum (varies widely)',
     growth_outlook: 'medium',
     required_skills: ['Physical Fitness', 'Sport-Specific Skills', 'Coaching', 'Nutrition Knowledge', 'Mental Toughness'],
     related_careers: ['physiotherapist', 'sports-psychologist', 'fitness-trainer'],
   },
 
-  // ── HOSPITALITY & TRAVEL ──────────────────────────
+  // â”€â”€ HOSPITALITY & TRAVEL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   {
     id: 'hotel-management',
     title: 'Hotel / Hospitality Manager',
@@ -491,13 +496,13 @@ export const careerDatabase: CareerData[] = [
     required_traits: { communication: 80, leadership: 75, empathy: 75, adaptability: 70 },
     education_path: ['B.Sc Hotel Management (IHM/NCHMCT)', 'BHM + MBA Hospitality', 'Diploma in Hotel Management'],
     salary_range: '$5,000 - $30,000',
-    salary_range_inr: '₹3L - ₹15L per annum',
+    salary_range_inr: 'â‚¹3L - â‚¹15L per annum',
     growth_outlook: 'medium',
     required_skills: ['Guest Relations', 'Operations Management', 'Food & Beverage', 'Revenue Management', 'Team Leadership'],
     related_careers: ['marketing-manager', 'entrepreneur', 'event-manager'],
   },
 
-  // ── PHARMACY & BIOTECH ────────────────────────────
+  // â”€â”€ PHARMACY & BIOTECH â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   {
     id: 'pharmacist',
     title: 'Pharmacist / Pharmaceutical Scientist',
@@ -508,13 +513,13 @@ export const careerDatabase: CareerData[] = [
     required_traits: { analytical: 80, detail_oriented: 85, technical: 75, empathy: 50 },
     education_path: ['B.Pharm (4 yrs) + M.Pharm', 'D.Pharm (2 yrs) for retail pharmacy', 'Pharm.D (6 yrs) for clinical pharmacy'],
     salary_range: '$5,000 - $25,000',
-    salary_range_inr: '₹3L - ₹12L per annum',
+    salary_range_inr: 'â‚¹3L - â‚¹12L per annum',
     growth_outlook: 'medium',
     required_skills: ['Pharmacology', 'Drug Interactions', 'Quality Control', 'Clinical Research', 'Patient Counseling'],
     related_careers: ['doctor-mbbs', 'research-scientist', 'biotech-professional'],
   },
 
-  // ── TECHNICAL WRITING & COMMUNICATION ─────────────
+  // â”€â”€ TECHNICAL WRITING & COMMUNICATION â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   {
     id: 'technical-writer',
     title: 'Technical Writer',
@@ -525,13 +530,13 @@ export const careerDatabase: CareerData[] = [
     required_traits: { communication: 85, detail_oriented: 85, technical: 60, analytical: 55 },
     education_path: ['B.Tech/B.Sc + writing skills', 'B.A. English + tech domain knowledge', 'Any degree + technical writing certification'],
     salary_range: '$8,000 - $35,000',
-    salary_range_inr: '₹4L - ₹18L per annum',
+    salary_range_inr: 'â‚¹4L - â‚¹18L per annum',
     growth_outlook: 'medium',
     required_skills: ['Technical Writing', 'API Documentation', 'Markdown/DITA', 'Information Architecture', 'Editing'],
     related_careers: ['content-creator', 'journalist', 'software-engineer'],
   },
 
-  // ── FASHION & TEXTILE ─────────────────────────────
+  // â”€â”€ FASHION & TEXTILE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   {
     id: 'fashion-designer',
     title: 'Fashion Designer',
@@ -542,13 +547,13 @@ export const careerDatabase: CareerData[] = [
     required_traits: { creative: 90, detail_oriented: 75, communication: 60, adaptability: 65 },
     education_path: ['B.Des Fashion Design (NIFT/NID/Pearl)', 'Diploma in Fashion Design', 'International programs (Parsons/CSM)'],
     salary_range: '$5,000 - $35,000',
-    salary_range_inr: '₹3L - ₹18L per annum',
+    salary_range_inr: 'â‚¹3L - â‚¹18L per annum',
     growth_outlook: 'medium',
     required_skills: ['Sketching', 'Pattern Making', 'Textile Knowledge', 'Trend Forecasting', 'Draping'],
     related_careers: ['graphic-designer', 'entrepreneur', 'interior-designer'],
   },
 
-  // ── CORPORATE TRAINER ─────────────────────────────
+  // â”€â”€ CORPORATE TRAINER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   {
     id: 'corporate-trainer',
     title: 'Corporate Trainer / L&D Specialist',
@@ -559,7 +564,7 @@ export const careerDatabase: CareerData[] = [
     required_traits: { communication: 90, empathy: 70, leadership: 70, creative: 55 },
     education_path: ['MBA HR + training certifications', 'Any degree + CPTD/ATD certification', 'Domain expertise + facilitation skills'],
     salary_range: '$8,000 - $35,000',
-    salary_range_inr: '₹4L - ₹18L per annum',
+    salary_range_inr: 'â‚¹4L - â‚¹18L per annum',
     growth_outlook: 'medium',
     required_skills: ['Facilitation', 'Instructional Design', 'Presentation', 'Needs Assessment', 'LMS Tools'],
     related_careers: ['teacher-professor', 'human-resources', 'clinical-psychologist'],
@@ -586,3 +591,4 @@ export function getCareersByCategory(category: string): CareerData[] {
 export function getCategories(): string[] {
   return Array.from(new Set(careerDatabase.map(c => c.category)));
 }
+

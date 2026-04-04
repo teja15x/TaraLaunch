@@ -818,3 +818,226 @@ export function buildRoleKnowledgePromptBlock(selectedRole?: string | null): str
     '- Always label salary and timeline numbers as estimates with company, city, market-cycle, and individual-skill variance.',
   ].join('\n');
 }
+
+interface RoleFamilyProtocol {
+  coreEvaluationFocus: string[];
+  commonMisconceptionsToProbe: string[];
+  evidenceChecksBeforeRecommendation: string[];
+  first30DayActions: {
+    'pre-12th': string;
+    'post-12th': string;
+    'in-college': string;
+    'post-college': string;
+  };
+}
+
+const ROLE_FAMILY_PROTOCOLS: Record<RoleFamily, RoleFamilyProtocol> = {
+  technology: {
+    coreEvaluationFocus: ['problem-solving stamina', 'math/logic comfort', 'build habit (projects)', 'debug resilience'],
+    commonMisconceptionsToProbe: ['high package stories represent everyone', 'course alone guarantees placement', 'coding means only one role'],
+    evidenceChecksBeforeRecommendation: ['at least one practical project signal', 'consistency in logic/analytical evidence', 'realistic effort acceptance'],
+    first30DayActions: {
+      'pre-12th': 'Choose stream clarity and start a weekly logic/problem-solving habit with one mini coding exposure task.',
+      'post-12th': 'Map exam and college route plus one foundational coding track; define backup branch pathways.',
+      'in-college': 'Ship one portfolio project, one DSA/logic routine, and one internship outreach cycle.',
+      'post-college': 'Build job-ready portfolio proof, target role-wise applications, and weekly interview drills.',
+    },
+  },
+  finance: {
+    coreEvaluationFocus: ['numerical discipline', 'detail accuracy', 'compliance tolerance', 'credential commitment'],
+    commonMisconceptionsToProbe: ['finance is only stock trading', 'credential path can be skipped', 'salary grows without domain depth'],
+    evidenceChecksBeforeRecommendation: ['commerce/accounting foundation signals', 'exam-readiness commitment', 'precision and consistency evidence'],
+    first30DayActions: {
+      'pre-12th': 'Clarify commerce fit and begin accounting/economics basics with one weekly financial literacy routine.',
+      'post-12th': 'Finalize route (BCom/CA/CMA/CS) and build a concrete exam + college + affordability map.',
+      'in-college': 'Start modeling/accounting practice stack and internship readiness with measurable milestones.',
+      'post-college': 'Target role-specific applications (analyst/audit/tax) with credential and project proof.',
+    },
+  },
+  healthcare: {
+    coreEvaluationFocus: ['service orientation', 'stress tolerance', 'study stamina', 'ethical responsibility'],
+    commonMisconceptionsToProbe: ['status is enough reason', 'healthcare path is short/easy', 'exam pressure can be ignored'],
+    evidenceChecksBeforeRecommendation: ['biology/science comfort or allied-health fit', 'long-horizon commitment', 'family affordability and timeline realism'],
+    first30DayActions: {
+      'pre-12th': 'Validate science readiness and create disciplined subject plan for healthcare eligibility paths.',
+      'post-12th': 'Finalize NEET/allied-health route with structured prep timeline and fallback pathways.',
+      'in-college': 'Strengthen clinical knowledge routine, communication, and practical exposure planning.',
+      'post-college': 'Target licensing/specialization/job track with weekly preparation and placement actions.',
+    },
+  },
+  'law-governance': {
+    coreEvaluationFocus: ['reading/writing rigor', 'argument clarity', 'policy/governance interest', 'long-term discipline'],
+    commonMisconceptionsToProbe: ['law is only courtroom drama', 'civil services is only memory game', 'prestige replaces preparation depth'],
+    evidenceChecksBeforeRecommendation: ['reasoning and writing quality signals', 'exam commitment evidence', 'timeline and failure-recovery readiness'],
+    first30DayActions: {
+      'pre-12th': 'Build language and reasoning habits with foundational current-affairs discipline.',
+      'post-12th': 'Choose CLAT/LLB or governance route and lock a realistic preparation schedule.',
+      'in-college': 'Build writing + internship proof and structured exam preparation consistency.',
+      'post-college': 'Run targeted exam/litigation/corporate pathway with measurable weekly outputs.',
+    },
+  },
+  'design-creative': {
+    coreEvaluationFocus: ['portfolio quality', 'taste + execution balance', 'problem framing', 'feedback iteration'],
+    commonMisconceptionsToProbe: ['creativity alone is enough', 'design has no analytical side', 'portfolio can be delayed'],
+    evidenceChecksBeforeRecommendation: ['artifact/portfolio evidence', 'user/problem understanding', 'practice consistency'],
+    first30DayActions: {
+      'pre-12th': 'Start observation + sketch/prototype routine and explore design entrance awareness.',
+      'post-12th': 'Choose exam/college route and build first portfolio case-study pipeline.',
+      'in-college': 'Ship portfolio-ready case studies and pursue internship/mentor critique cycles.',
+      'post-college': 'Package portfolio for hiring, target role-fit studios, and improve interview storytelling.',
+    },
+  },
+  'business-management': {
+    coreEvaluationFocus: ['communication and influence', 'decision quality under constraints', 'ownership', 'execution consistency'],
+    commonMisconceptionsToProbe: ['management is only talking', 'MBA alone solves capability gaps', 'leadership means title only'],
+    evidenceChecksBeforeRecommendation: ['problem-solving and ownership evidence', 'communication clarity', 'track-specific preparedness'],
+    first30DayActions: {
+      'pre-12th': 'Build communication basics and business-awareness habit with practical mini-projects.',
+      'post-12th': 'Select degree route and start structured exposure to analytics/operations/market basics.',
+      'in-college': 'Build internship + leadership proof through projects and measurable outcome ownership.',
+      'post-college': 'Target role buckets with execution artifacts and structured interview readiness.',
+    },
+  },
+  'engineering-core': {
+    coreEvaluationFocus: ['physics/math fundamentals', 'practical systems thinking', 'lab/tool interest', 'patience for depth'],
+    commonMisconceptionsToProbe: ['core has no growth', 'tier alone decides outcome', 'software switch is the only path'],
+    evidenceChecksBeforeRecommendation: ['foundational aptitude signal', 'hands-on problem-solving evidence', 'industry-path realism'],
+    first30DayActions: {
+      'pre-12th': 'Clarify core-engineering interest with strong fundamentals roadmap.',
+      'post-12th': 'Pick branch with role-fit lens and map labs/tooling exposure early.',
+      'in-college': 'Build tool-based projects and internships to bridge curriculum-industry gap.',
+      'post-college': 'Target core plus adjacent hybrid roles with practical proof and interview preparation.',
+    },
+  },
+  'education-research': {
+    coreEvaluationFocus: ['subject depth', 'teaching/research patience', 'communication quality', 'curiosity persistence'],
+    commonMisconceptionsToProbe: ['teaching is fallback only', 'research means no careers', 'depth can be replaced by shortcuts'],
+    evidenceChecksBeforeRecommendation: ['subject mastery trend', 'writing/communication evidence', 'long-horizon commitment'],
+    first30DayActions: {
+      'pre-12th': 'Identify strongest subjects and begin explanation-based learning habit.',
+      'post-12th': 'Choose subject-major path and map teacher/research progression routes.',
+      'in-college': 'Build teaching/research artifacts and mentor-led feedback loops.',
+      'post-college': 'Pursue qualification path with portfolio of teaching/research outputs.',
+    },
+  },
+  'hospitality-services': {
+    coreEvaluationFocus: ['service mindset', 'operational discipline', 'people handling', 'consistency under pressure'],
+    commonMisconceptionsToProbe: ['hospitality is easy glamour', 'soft skills alone are enough', 'growth is random'],
+    evidenceChecksBeforeRecommendation: ['service behavior evidence', 'discipline and reliability signal', 'real work-hour acceptance'],
+    first30DayActions: {
+      'pre-12th': 'Explore service careers with communication and discipline foundations.',
+      'post-12th': 'Select hotel/service program and start practical customer-experience tasks.',
+      'in-college': 'Build operational proof via internships and measurable service outcomes.',
+      'post-college': 'Target role-specific openings with strong service portfolio and references.',
+    },
+  },
+  'sports-performance': {
+    coreEvaluationFocus: ['discipline consistency', 'coaching receptivity', 'injury/risk awareness', 'backup planning maturity'],
+    commonMisconceptionsToProbe: ['talent alone is enough', 'backup plan means giving up', 'short-term wins ensure long career'],
+    evidenceChecksBeforeRecommendation: ['training consistency evidence', 'performance and recovery discipline', 'parallel pathway readiness'],
+    first30DayActions: {
+      'pre-12th': 'Set structured training plus academics balance routine and basic backup exploration.',
+      'post-12th': 'Choose performance vs allied sports path with realistic progression metrics.',
+      'in-college': 'Build competition + analytics/coaching exposure with documented progress.',
+      'post-college': 'Target pro/coaching/analytics role track with strong performance dossier.',
+    },
+  },
+  'media-communication': {
+    coreEvaluationFocus: ['storytelling quality', 'consistency of publishing', 'audience understanding', 'execution speed'],
+    commonMisconceptionsToProbe: ['virality equals career', 'content consistency is optional', 'communication does not need structure'],
+    evidenceChecksBeforeRecommendation: ['content artifact evidence', 'communication quality trend', 'domain specialization clarity'],
+    first30DayActions: {
+      'pre-12th': 'Start structured expression practice (writing/video/speaking) with consistency habit.',
+      'post-12th': 'Choose media route and begin portfolio publishing calendar.',
+      'in-college': 'Build niche portfolio and internship/editorial exposure.',
+      'post-college': 'Target role-fit media opportunities with measurable portfolio outcomes.',
+    },
+  },
+  'aviation-maritime': {
+    coreEvaluationFocus: ['medical/fitness readiness', 'procedural discipline', 'risk responsibility', 'cost-timeline realism'],
+    commonMisconceptionsToProbe: ['high prestige means easy entry', 'safety discipline can be learned later', 'cost planning is optional'],
+    evidenceChecksBeforeRecommendation: ['eligibility and medical constraints known', 'family affordability checked', 'long training acceptance'],
+    first30DayActions: {
+      'pre-12th': 'Assess eligibility basics and build discipline/fitness awareness.',
+      'post-12th': 'Map training/licensing path with cost and timeline clarity.',
+      'in-college': 'Build targeted preparation + eligibility milestones + backup route.',
+      'post-college': 'Execute licensing/job pathway with strict milestone tracking.',
+    },
+  },
+  'psychology-counseling': {
+    coreEvaluationFocus: ['empathy + boundaries balance', 'listening quality', 'evidence-based mindset', 'long-term training acceptance'],
+    commonMisconceptionsToProbe: ['good listener alone can counsel professionally', 'formal supervision is optional', 'empathy means no structure'],
+    evidenceChecksBeforeRecommendation: ['academic pathway clarity', 'ethics/supervision awareness', 'communication and emotional steadiness evidence'],
+    first30DayActions: {
+      'pre-12th': 'Develop foundational psychology awareness and communication discipline.',
+      'post-12th': 'Select psychology route and map supervised progression stages.',
+      'in-college': 'Build observation notes, case-thinking habits, and supervised exposure.',
+      'post-college': 'Pursue specialization/licensure path with structured professional development.',
+    },
+  },
+  'public-sector': {
+    coreEvaluationFocus: ['long-horizon consistency', 'writing and analysis', 'public-service motivation', 'stress resilience'],
+    commonMisconceptionsToProbe: ['status is enough motivation', 'one attempt decides everything', 'memorization alone wins exams'],
+    evidenceChecksBeforeRecommendation: ['consistent preparation behavior', 'writing/analysis growth signal', 'fallback path planning'],
+    first30DayActions: {
+      'pre-12th': 'Build fundamentals: reading, writing, and disciplined routine.',
+      'post-12th': 'Choose degree with exam-fit and begin realistic prep architecture.',
+      'in-college': 'Run structured prep with mock-review cycle and backup employability track.',
+      'post-college': 'Execute exam strategy with measurable weekly outputs and fallback safeguards.',
+    },
+  },
+  exploration: {
+    coreEvaluationFocus: ['self-discovery quality', 'constraint awareness', 'decision readiness', 'learning agility'],
+    commonMisconceptionsToProbe: ['uncertainty means weakness', 'early confusion must be hidden', 'one test should decide life path'],
+    evidenceChecksBeforeRecommendation: ['interest and constraint map completed', 'at least 2 role clusters tested', 'contradictions resolved'],
+    first30DayActions: {
+      'pre-12th': 'Run structured exploration of strengths, interests, and stream fit without pressure.',
+      'post-12th': 'Test 2 to 3 role clusters and narrow by constraints plus effort reality.',
+      'in-college': 'Validate continue-vs-pivot through projects, mentors, and realistic outcomes.',
+      'post-college': 'Choose practical role cluster and execute first employability sprint.',
+    },
+  },
+};
+
+function resolveStageBucketFromHint(stageHint?: string): 'pre-12th' | 'post-12th' | 'in-college' | 'post-college' {
+  const normalized = normalizeText(stageHint ?? '');
+  if (normalized.includes('pre12') || normalized.includes('pre-12')) return 'pre-12th';
+  if (normalized.includes('post12') || normalized.includes('post-12')) return 'post-12th';
+  if (normalized.includes('incollege') || normalized.includes('in-college')) return 'in-college';
+  return 'post-college';
+}
+
+export function buildRoleSpecificCounselingProtocolBlock(params: {
+  selectedRole?: string | null;
+  currentTurnNumber: number;
+  counselingTrack?: 'career-counseling' | 'school-exam-support' | 'post-college-employability';
+  stageHint?: string;
+}): string {
+  const summary = getRoleKnowledgeSummary(params.selectedRole);
+  if (!summary) {
+    return [
+      'Role-specific counseling protocol: no concrete role selected yet.',
+      '- Stay in exploration mode: test 2 to 3 role clusters using one focused question per turn.',
+      '- Do not push final recommendation before evidence gates are met.',
+    ].join('\n');
+  }
+
+  const protocol = ROLE_FAMILY_PROTOCOLS[summary.roleFamily];
+  const stageBucket = resolveStageBucketFromHint(params.stageHint);
+  const discoveryPhase = params.currentTurnNumber <= 25;
+  const modeLabel = discoveryPhase ? 'discovery' : 'narrowing-or-recommendation';
+
+  return [
+    `Role-specific counseling protocol for ${summary.roleTitle}:`,
+    `- Family protocol: ${summary.roleFamily}`,
+    `- Active mode: ${modeLabel}`,
+    `- Track context: ${params.counselingTrack ?? 'career-counseling'}`,
+    `- Stage-adapted first 30-day action: ${protocol.first30DayActions[stageBucket]}`,
+    `- Core evaluation focus: ${protocol.coreEvaluationFocus.join(' | ')}`,
+    `- Misconceptions to probe gently: ${protocol.commonMisconceptionsToProbe.join(' | ')}`,
+    `- Evidence checks before recommendation: ${protocol.evidenceChecksBeforeRecommendation.join(' | ')}`,
+    discoveryPhase
+      ? '- Discovery guardrail: do not present final ranked role verdict yet; validate intent and constraints first.'
+      : '- If evidence is strong and contradictions are resolved, move to recommendation with explainability and backup paths.',
+  ].join('\n');
+}

@@ -21,6 +21,7 @@ import {
   LOCAL_CHAT_VERSION_KEY,
   LOCAL_STUDENT_INTAKE_KEY,
 } from '@/lib/career-agent/storage';
+import { detectStudentStage, type StageDetectionResult } from '@/lib/career-agent/stageDetection';
 import { VoiceCallDock, VoiceCallScreen } from '@/components/chat/VoiceCallScreen';
 import { VoiceAgentAvatar, type VoiceAvatarStyle } from '@/components/chat/VoiceAgentAvatar';
 import { MarkdownMessage } from '@/components/chat/MarkdownMessage';
@@ -33,6 +34,7 @@ interface StudentIntake {
   currentStage: string;
   stateOrCity: string;
   collegeRecommendationScope: 'state-first' | 'india-wide';
+  comparisonFocus: string;
   currentSituation: string;
   interests: string;
   confusion: string;
@@ -53,6 +55,7 @@ const EMPTY_STUDENT_INTAKE: StudentIntake = {
   currentStage: '',
   stateOrCity: '',
   collegeRecommendationScope: 'state-first',
+  comparisonFocus: '',
   currentSituation: '',
   interests: '',
   confusion: '',
@@ -267,6 +270,12 @@ export default function ChatPage() {
   const [studentIntake, setStudentIntake] = useState<StudentIntake>(EMPTY_STUDENT_INTAKE);
   const [intakeSubmitted, setIntakeSubmitted] = useState(false);
   const [intakeChecked, setIntakeChecked] = useState(false);
+  const [showAdvancedSettings, setShowAdvancedSettings] = useState(false);
+  const [showUtilityMenu, setShowUtilityMenu] = useState(false);
+  
+  // Layer 1: Stage Detection
+  const [detectedStage, setDetectedStage] = useState<StageDetectionResult | null>(null);
+  
   const [voiceReplyEnabled, setVoiceReplyEnabled] = useState(false);
   const [voiceCallMinimized, setVoiceCallMinimized] = useState(false);
   const [isAssistantSpeaking, setIsAssistantSpeaking] = useState(false);
@@ -290,7 +299,22 @@ export default function ChatPage() {
   const supabaseConfigured = hasSupabaseBrowserConfig();
   const supabase = useMemo(() => (supabaseConfigured ? createClient() : null), [supabaseConfigured]);
   const apiHistoryWindow = voiceReplyEnabled ? 8 : 12;
+  const hasConversationStarted = messages.length > 0;
   const router = useRouter();
+
+  const getPersistedSubmittedIntake = useCallback((): StudentIntake | undefined => {
+    if (typeof window === 'undefined') return undefined;
+    try {
+      const raw = window.localStorage.getItem(LOCAL_STUDENT_INTAKE_KEY);
+      if (!raw) return undefined;
+      const parsed = JSON.parse(raw) as { intake?: Partial<StudentIntake>; submitted?: boolean };
+      if (!parsed?.submitted || !parsed.intake) return undefined;
+      const merged = { ...EMPTY_STUDENT_INTAKE, ...parsed.intake };
+      return hasRequiredIntakeDetails(merged, true) ? merged : undefined;
+    } catch {
+      return undefined;
+    }
+  }, []);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -422,6 +446,28 @@ export default function ChatPage() {
       router.replace('/chat/start');
     }
   }, [intakeChecked, intakeSubmitted, router, studentIntake]);
+
+  // Layer 1: Detect student stage on intake submission
+  useEffect(() => {
+    if (!intakeSubmitted || !studentIntake.studentName.trim()) {
+      return;
+    }
+
+    const result = detectStudentStage({
+      studentName: studentIntake.studentName,
+      currentStage: studentIntake.currentStage,
+      stateOrCity: studentIntake.stateOrCity,
+      currentSituation: studentIntake.currentSituation,
+      interests: studentIntake.interests,
+      confusion: studentIntake.confusion,
+      stressors: studentIntake.stressors,
+      familyPressure: studentIntake.familyPressure,
+      targetRole: studentIntake.targetRole,
+    });
+
+    setDetectedStage(result);
+
+  }, [intakeSubmitted, studentIntake]);
 
   useEffect(() => {
     // Guard: only write back after intake has been loaded from localStorage.
@@ -773,6 +819,8 @@ export default function ChatPage() {
     setLoading(true);
 
     try {
+      const persistedSubmittedIntake = getPersistedSubmittedIntake();
+      const intakeForRequest = intakeSubmitted ? studentIntake : persistedSubmittedIntake;
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -783,7 +831,8 @@ export default function ChatPage() {
           selectedRole: selectedRole.trim() || undefined,
           voiceMode: true,
           voiceSessionStart: true,
-          studentIntake: intakeSubmitted ? studentIntake : undefined,
+          detectedStage: detectedStage?.stage,
+          studentIntake: intakeForRequest,
           messages: messagesRef.current.slice(-apiHistoryWindow).map((messageItem) => ({
             role: messageItem.role,
             content: messageItem.content,
@@ -821,7 +870,7 @@ export default function ChatPage() {
       setLoading(false);
       setIsVoiceStarting(false);
     }
-  }, [apiHistoryWindow, conversationStyle, intakeSubmitted, loading, preferredLanguage, scriptPreference, selectedRole, speakAssistantMessage, studentIntake]);
+  }, [apiHistoryWindow, conversationStyle, detectedStage?.stage, getPersistedSubmittedIntake, intakeSubmitted, loading, preferredLanguage, scriptPreference, selectedRole, speakAssistantMessage, studentIntake]);
 
   const sendMessage = useCallback(
     async (
@@ -844,11 +893,12 @@ export default function ChatPage() {
       const effectiveConversationStyle = overrides?.conversationStyle ?? conversationStyle;
       const effectiveScriptPreference = overrides?.scriptPreference ?? scriptPreference;
       const effectiveSelectedRole = overrides?.selectedRole ?? (selectedRole.trim() || undefined);
+      const persistedSubmittedIntake = getPersistedSubmittedIntake();
       const effectiveStudentIntake = overrides?.useStudentIntake
         ? (overrides?.studentIntake ?? studentIntake)
         : intakeSubmitted
           ? studentIntake
-          : undefined;
+          : persistedSubmittedIntake;
 
       const userMsg: ChatMessage = {
         id: crypto.randomUUID(),
@@ -872,6 +922,7 @@ export default function ChatPage() {
             conversationStyle: effectiveConversationStyle,
             scriptPreference: effectiveScriptPreference,
             selectedRole: effectiveSelectedRole,
+            detectedStage: detectedStage?.stage,
             voiceMode: voiceReplyEnabled,
             studentIntake: effectiveStudentIntake,
           }),
@@ -906,6 +957,8 @@ export default function ChatPage() {
     [
       apiHistoryWindow,
       conversationStyle,
+      detectedStage?.stage,
+      getPersistedSubmittedIntake,
       input,
       intakeSubmitted,
       loading,
@@ -973,68 +1026,132 @@ export default function ChatPage() {
         />
       )}
       <div className="surface-panel glow-top animate-rise mx-auto flex h-[calc(100vh-8rem)] w-full max-w-5xl flex-col overflow-hidden rounded-[1.85rem]">
-      <div className="border-b border-white/10 bg-white/[0.03] px-4 pb-3 pt-4 space-y-3 sm:px-6 animate-rise-delayed">
-        <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+      <div className="animate-rise-delayed border-b border-white/10 bg-white/[0.03] px-4 pb-4 pt-4 sm:px-6">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-xs uppercase tracking-[0.16em] text-white/45">Counseling Console</p>
             <h1 className="font-display text-2xl text-white">Career Mentor Chat</h1>
           </div>
-          <p className="text-xs text-white/60">Adaptive guidance with language and role context</p>
+          {!hasConversationStarted && <p className="text-xs text-white/60">Clear guidance, one step at a time</p>}
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-2">
-          {/* Language selection removed from chat UI. Only in intake/global switcher. */}
-          <label className="text-xs text-white/60">
-            Writing style
-            <select
-              value={scriptPreference}
-              onChange={(e) => setScriptPreference(e.target.value as SupportedScriptPreference)}
-              className="mt-1 w-full rounded-xl border border-white/20 bg-white/5 px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-primary-300/45"
-            >
-              {SCRIPT_PREFERENCE_OPTIONS.map((option) => (
-                <option key={option.code} value={option.code} className="text-black">
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label className="text-xs text-white/60">
-            Conversation style
-            <select
-              value={conversationStyle}
-              onChange={(e) => setConversationStyle(e.target.value as SupportedConversationStyle)}
-              className="mt-1 w-full rounded-xl border border-white/20 bg-white/5 px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-primary-300/45"
-            >
-              {CONVERSATION_STYLE_OPTIONS.map((style) => (
-                <option key={style.code} value={style.code} className="text-black">
-                  {style.label}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label className="text-xs text-white/60">
-            Dream role or target career
-            <input
-              value={selectedRole}
-              onChange={(e) => setSelectedRole(e.target.value)}
-              placeholder="Doctor, IAS, Product Designer, Data Analyst..."
-              className="mt-1 w-full rounded-xl border border-white/20 bg-white/5 px-3 py-2 text-sm text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-primary-300/45"
-            />
-          </label>
-        </div>
-        <div className="flex flex-wrap items-center gap-2 text-xs text-white/70">
+
+        <div className="mt-3 flex flex-wrap items-center gap-2">
           <Button type="button" variant="secondary" size="sm" onClick={toggleVoiceReply}>
             {voiceReplyEnabled ? 'End voice call' : 'Start voice call'}
           </Button>
           <Link href="/chat/start" className="inline-flex items-center rounded-lg border border-white/20 bg-white/5 px-3 py-1.5 text-xs text-white hover:bg-white/10">
             Intake and rules
           </Link>
-          <Button type="button" variant="ghost" size="sm" onClick={resetChatSession}>
-            Start fresh
-          </Button>
-          <span>{voiceSupported ? 'Microphone is available in this browser.' : 'Microphone is not available. You can still use typed chat.'}</span>
-          {preferredLanguage === 'auto' && <span>The agent will ask language preference first.</span>}
-          {!supabaseConfigured && <span>Agent-only mode: chat stays in this browser for now.</span>}
+          {!hasConversationStarted && (
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={() => setShowAdvancedSettings((currentValue) => !currentValue)}
+            >
+              {showAdvancedSettings ? 'Hide settings' : 'Show settings'}
+            </Button>
+          )}
+          <div className="relative ml-auto">
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={() => setShowUtilityMenu((currentValue) => !currentValue)}
+            >
+              More
+            </Button>
+            {showUtilityMenu && (
+              <div className="absolute right-0 z-20 mt-2 w-44 rounded-xl border border-white/15 bg-slate-950/95 p-1.5 shadow-xl">
+                <button
+                  type="button"
+                  onClick={() => {
+                    resetChatSession();
+                    setShowUtilityMenu(false);
+                  }}
+                  className="w-full rounded-lg px-3 py-2 text-left text-xs text-white/85 hover:bg-white/10"
+                >
+                  Start fresh
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowAdvancedSettings((currentValue) => !currentValue);
+                    setShowUtilityMenu(false);
+                  }}
+                  className="w-full rounded-lg px-3 py-2 text-left text-xs text-white/85 hover:bg-white/10"
+                >
+                  {showAdvancedSettings ? 'Hide settings' : 'Show settings'}
+                </button>
+              </div>
+            )}
+          </div>
         </div>
+
+        {!hasConversationStarted && showAdvancedSettings && (
+          <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
+            <label className="rounded-xl border border-white/10 bg-white/[0.02] p-2 text-xs text-white/60">
+              Writing style
+              <select
+                value={scriptPreference}
+                onChange={(e) => setScriptPreference(e.target.value as SupportedScriptPreference)}
+                className="mt-1 w-full rounded-xl border border-white/20 bg-white/5 px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-primary-300/45"
+              >
+                {SCRIPT_PREFERENCE_OPTIONS.map((option) => (
+                  <option key={option.code} value={option.code} className="text-black">
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="rounded-xl border border-white/10 bg-white/[0.02] p-2 text-xs text-white/60">
+              Conversation style
+              <select
+                value={conversationStyle}
+                onChange={(e) => setConversationStyle(e.target.value as SupportedConversationStyle)}
+                className="mt-1 w-full rounded-xl border border-white/20 bg-white/5 px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-primary-300/45"
+              >
+                {CONVERSATION_STYLE_OPTIONS.map((style) => (
+                  <option key={style.code} value={style.code} className="text-black">
+                    {style.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="rounded-xl border border-white/10 bg-white/[0.02] p-2 text-xs text-white/60">
+              Dream role or target career
+              <input
+                value={selectedRole}
+                onChange={(e) => setSelectedRole(e.target.value)}
+                placeholder="Doctor, IAS, Product Designer, Data Analyst..."
+                className="mt-1 w-full rounded-xl border border-white/20 bg-white/5 px-3 py-2 text-sm text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-primary-300/45"
+              />
+            </label>
+          </div>
+        )}
+
+        {!hasConversationStarted && (
+        <div className="mt-3 flex flex-wrap items-center gap-2 text-[11px] text-white/65">
+          <span className="rounded-full border border-white/15 px-2.5 py-1">
+            {voiceSupported ? 'Mic ready' : 'Mic unavailable'}
+          </span>
+          {preferredLanguage === 'auto' && (
+            <span className="rounded-full border border-white/15 px-2.5 py-1">
+              Language will be confirmed in chat
+            </span>
+          )}
+          {!supabaseConfigured && (
+            <span className="rounded-full border border-white/15 px-2.5 py-1">
+              Local-only chat mode
+            </span>
+          )}
+          {intakeSubmitted && (
+            <span className="rounded-full border border-emerald-400/35 bg-emerald-500/15 px-2.5 py-1 text-emerald-100">
+              Intake loaded
+            </span>
+          )}
+        </div>
+        )}
       </div>
       <div className="flex-1 overflow-y-auto px-4 py-5 space-y-4 sm:px-6">
         {(isListening || isAssistantSpeaking) && !voiceReplyEnabled && (
@@ -1046,67 +1163,40 @@ export default function ChatPage() {
           />
         )}
         {messages.length === 0 && (
-          <div className="py-10 space-y-5">
+          <div className="space-y-4 py-8">
             <div className="surface-panel-soft interactive-card rounded-2xl p-5 sm:p-6">
-              <p className="text-[11px] uppercase tracking-[0.2em] text-white/45">Professional counseling mode</p>
-              <h2 className="mt-2 font-display text-2xl text-white sm:text-3xl">This is a structured counseling journey, not a random chatbot.</h2>
+              <p className="text-[11px] uppercase tracking-[0.2em] text-white/45">Structured Counseling Journey</p>
+              <h2 className="mt-2 font-display text-2xl text-white sm:text-3xl">Clear decisions. Clear next action.</h2>
               <p className="mt-3 max-w-3xl text-sm leading-relaxed text-white/70">
-                We start with your profile, apply the counseling rules, use the reference books as knowledge grounding, and then guide you step-by-step with clarity, confidence, and action.
+                Start with intake, then get a focused recommendation and one practical next step in this session.
               </p>
               <div className="mt-5 flex flex-wrap items-center gap-3">
                 <Link href="/chat/start" className="inline-flex items-center rounded-xl bg-primary-500 px-4 py-2.5 text-sm font-semibold text-slate-950 transition hover:bg-primary-400">
                   Open structured intake
                 </Link>
-                {intakeSubmitted && (
+                {intakeSubmitted ? (
                   <span className="rounded-full border border-emerald-400/35 bg-emerald-500/15 px-3 py-1 text-xs text-emerald-100">
-                    Intake profile is loaded
+                    Intake profile loaded
                   </span>
-                )}
-                {!intakeSubmitted && (
+                ) : (
                   <span className="rounded-full border border-amber-300/30 bg-amber-400/10 px-3 py-1 text-xs text-amber-100">
-                    Intake needed for best first 5 minutes
+                    Intake recommended before first session
                   </span>
                 )}
               </div>
             </div>
-
-            <div className="grid gap-4 lg:grid-cols-2">
-              <div className="surface-panel-soft interactive-card rounded-2xl p-5">
-                <p className="text-sm font-semibold text-white">First 5-minute trial flow</p>
-                <ol className="mt-3 space-y-2 text-sm text-white/70">
-                  <li>1. Warm professional introduction and clarity on your goal.</li>
-                  <li>2. One high-signal diagnostic question from your profile context.</li>
-                  <li>3. One practical insight based on Indian career realities.</li>
-                  <li>4. One actionable next step to prove momentum.</li>
-                </ol>
-              </div>
-
-              <div className="surface-panel-soft interactive-card rounded-2xl p-5">
-                <p className="text-sm font-semibold text-white">Rules and reference knowledge</p>
-                <ul className="mt-3 space-y-2 text-sm text-white/70">
-                  <li>- Uses your stored intake first before asking basics again.</li>
-                  <li>- Applies strict counseling rules for empathy, structure, and fit analysis.</li>
-                  <li>- Uses Indian guidance books and exam references as internal knowledge context.</li>
-                  <li>- Avoids generic filler and asks focused, high-value questions.</li>
-                </ul>
-              </div>
-            </div>
-
-            {/* Quick language start removed. Language is set only in intake/global switcher. */}
 
             {intakeSubmitted && (
               <div className="surface-panel-soft interactive-card rounded-2xl p-5">
-                <p className="text-sm font-semibold text-white">Profile-loaded introduction</p>
+                <p className="text-sm font-semibold text-white">Start from your loaded profile</p>
                 <p className="mt-2 text-sm text-white/70">
                   {studentIntake.studentName?.trim() ? `${studentIntake.studentName.trim()}, ` : ''}
-                  I have your starting context{studentIntake.currentStage?.trim() ? ` (${studentIntake.currentStage.trim()})` : ''}.
-                  {' '}I will guide with structure and one step at a time.
+                  your context is loaded{studentIntake.currentStage?.trim() ? ` (${studentIntake.currentStage.trim()})` : ''}. Continue in sequence.
                 </p>
                 <div className="mt-4 flex flex-wrap gap-2">
                   <Button size="sm" onClick={() => sendMessage('Please start with a clear introduction and give me a structured first 5-minute guidance plan based on my profile.')}>Start structured session</Button>
-                  <Button size="sm" variant="secondary" onClick={() => sendMessage('Use my intake details and tell me the best career direction with reasoning, risks, and first action steps.')}>Give me my first strategy</Button>
                   <Link href="/chat/start" className="inline-flex items-center rounded-lg border border-white/20 bg-white/5 px-3 py-2 text-xs text-white hover:bg-white/10">
-                    Edit intake details
+                    Refine intake
                   </Link>
                 </div>
               </div>

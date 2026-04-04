@@ -69,7 +69,7 @@ export function extractTraitsFromPath(
     }
 
     // Move to next node
-    currentNodeId = chosenOption.nextNodeId || undefined;
+    currentNodeId = chosenOption.nextNodeId || '';
   }
 
   return traits;

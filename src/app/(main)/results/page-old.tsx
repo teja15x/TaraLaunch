@@ -168,7 +168,7 @@ export default function ResultsPage() {
         const chatTurns = userTurnCount ?? fallbackTurns;
         const completedGames = assessmentProfile?.completed_games?.length ?? 0;
         const assessmentProgress = Number(assessmentProfile?.assessment_progress ?? 0);
-        const mentality = inferMentalityFromMessages((recentUserMessages ?? []).map((m) => m.content));
+        const mentality = inferMentalityFromMessages((recentUserMessages ?? []).map((m: any) => m.content));
 
         setEvidence({
           chatTurns,

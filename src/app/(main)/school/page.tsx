@@ -82,7 +82,7 @@ export default function SchoolDashboard() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-white mb-1">🏫 School Dashboard</h1>
-          <p className="text-primary-200 text-sm">Manage students, track progress, and view career insights</p>
+          <p className="text-primary-200 text-sm">Track syllabus readiness, test progress, and career guidance outcomes</p>
         </div>
         <Button variant="secondary" onClick={() => router.push('/school/invite')}>
           + Invite Students

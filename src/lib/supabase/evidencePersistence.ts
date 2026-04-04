@@ -32,7 +32,7 @@ export async function logEvidence(
   supabase: SupabaseClient,
   userId: string,
   sessionId: string,
-  evidence: Omit<EvidenceItem, 'id' | 'user_id' | 'created_at'>
+  evidence: Omit<EvidenceItem, 'id' | 'user_id' | 'created_at' | 'timestamp'>
 ): Promise<EvidenceItem | null> {
   const { data, error } = await supabase
     .from('evidence_log')
@@ -185,7 +185,7 @@ export async function logRoleDepthTestEvidence(
   return logEvidence(supabase, userId, sessionId, {
     source: 'roleDepthTest',
     source_id: roleId,
-    signal: `Role understanding for ${roleId}: ${depthLevel} level (misconception calibration: ${misconceptionCalibration:+d})`,
+    signal: `Role understanding for ${roleId}: ${depthLevel} level (misconception calibration: ${misconceptionCalibration > 0 ? '+' : ''}${misconceptionCalibration})`,
     career_dimension: 'role_understanding',
     signal_value: depthScore,
     weight,

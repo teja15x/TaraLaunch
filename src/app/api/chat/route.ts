@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+﻿import { NextRequest, NextResponse } from 'next/server';
 import { createServerSupabaseClient, hasSupabaseServerConfig } from '@/lib/supabase/server';
 import { getChatCompletion } from '@/lib/openai/client';
 import {
@@ -9,11 +9,23 @@ import {
   normalizeConversationStyle,
   normalizeScriptPreference,
 } from '@/lib/career-agent/prompt';
+import { deriveCounselingTrack, detectStageOverride, detectStudentStage, StudentStage } from '@/lib/career-agent/stageDetection';
+import { buildKnowledgeBasePromptBlock, buildKnowledgeDecision } from '@/lib/career-agent/knowledgeBase';
 import { detectRoleMentionFromText } from '@/lib/career-agent/roleKnowledge';
+import { buildRecommendationGateDecision } from '@/lib/career-agent/recommendationGate';
+import { applyMarketRealities } from '@/lib/career-engine/marketReality';
+import { diagnoseConfusion } from '@/lib/career-engine/confusionMatrix';
+import { careerDatabase } from '@/data/careers';
 import { detectContradictions, getCounselorReprobeForContradiction } from '@/lib/career-engine/stageGates';
+import { extractActionItems } from '@/lib/career-engine/actionExtraction';
 import { getAgeTier, type AgeTier } from '@/utils/helpers';
 
 const MAX_HISTORY = 30;
+
+function resolveKnowledgeRetrievalMode(): 'core' | 'expanded' {
+  const raw = (process.env.KNOWLEDGE_RETRIEVAL_MODE ?? 'expanded').trim().toLowerCase();
+  return raw === 'core' ? 'core' : 'expanded';
+}
 
 interface ChatRequestBody {
   message?: string;
@@ -24,11 +36,13 @@ interface ChatRequestBody {
   selectedRole?: string;
   voiceMode?: boolean;
   voiceSessionStart?: boolean;
+  detectedStage?: string;
   studentIntake?: {
     studentName?: string;
     currentStage?: string;
     stateOrCity?: string;
     collegeRecommendationScope?: 'state-first' | 'india-wide';
+    comparisonFocus?: string;
     currentSituation?: string;
     interests?: string;
     confusion?: string;
@@ -43,6 +57,7 @@ interface StudentIntakePayload {
   currentStage?: string;
   stateOrCity?: string;
   collegeRecommendationScope?: 'state-first' | 'india-wide';
+  comparisonFocus?: string;
   currentSituation?: string;
   interests?: string;
   confusion?: string;
@@ -80,6 +95,7 @@ function sanitizeStudentIntake(input?: StudentIntakePayload | null): StudentInta
     currentStage: sanitizeFreeText(input.currentStage, 80),
     stateOrCity: sanitizeFreeText(input.stateOrCity, 80),
     collegeRecommendationScope: scope,
+    comparisonFocus: sanitizeFreeText(input.comparisonFocus, 160),
     currentSituation: sanitizeFreeText(input.currentSituation, 220),
     interests: sanitizeFreeText(input.interests, 220),
     confusion: sanitizeFreeText(input.confusion, 220),
@@ -104,6 +120,7 @@ function buildStudentIntakeContext(studentIntake: StudentIntakePayload | null): 
   if (studentIntake.currentStage) lines.push(`- Current stage: ${studentIntake.currentStage}`);
   if (studentIntake.stateOrCity) lines.push(`- State or city context: ${studentIntake.stateOrCity}`);
   if (studentIntake.collegeRecommendationScope) lines.push(`- College recommendation scope: ${studentIntake.collegeRecommendationScope === 'india-wide' ? 'All India comparison' : 'State/region first'}`);
+  if (studentIntake.comparisonFocus) lines.push(`- Comparison focus requested: ${studentIntake.comparisonFocus}`);
   if (studentIntake.currentSituation) lines.push(`- Current situation: ${studentIntake.currentSituation}`);
   if (studentIntake.interests) lines.push(`- Interests or strengths they already mentioned: ${studentIntake.interests}`);
   if (studentIntake.confusion) lines.push(`- Main confusion right now: ${studentIntake.confusion}`);
@@ -114,6 +131,10 @@ function buildStudentIntakeContext(studentIntake: StudentIntakePayload | null): 
   lines.push('Treat these as already known facts. Do not ask all of them again immediately. Start from them and ask only the next most useful question.');
 
   return lines.join('\n');
+}
+
+function sanitizeDetectedStage(stage?: string): string | undefined {
+  return sanitizeFreeText(stage, 80);
 }
 
 function normalizeClientMessages(messages?: Array<{ role?: string; content?: string }>) {
@@ -200,6 +221,110 @@ function resolveChatApiError(error: unknown): { status: number; error: string } 
   return { status: 500, error: 'Failed to get response' };
 }
 
+// ============================================================================
+// HELPER: Load and persist detected stage
+// ============================================================================
+
+async function loadAndPersistStage(
+  supabase: ReturnType<typeof createServerSupabaseClient> | null,
+  userId: string | null,
+  newMessage: string,
+  requestedStage?: string,
+): Promise<{
+  detectedStage: string;
+  stageConfidence: number;
+  stageOverrideNote: string;
+  stageConfirmation: string;
+}> {
+  let detectedStage = requestedStage ?? '';
+  let stageConfidence = 0;
+  let stageOverrideNote = '';
+  let stageConfirmation = '';
+
+  if (!supabase || !userId) {
+    // Fallback: Run detection on message only
+    const result = detectStudentStage({ currentStage: newMessage });
+    return {
+      detectedStage: result.stage,
+      stageConfidence: result.confidence,
+      stageOverrideNote: '',
+      stageConfirmation: `[INTERNAL: Detected stage ${result.stage} with ${result.confidence}% confidence]`,
+    };
+  }
+
+  try {
+    // Load previous stage from profile
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('detected_stage, stage_confidence')
+      .eq('id', userId)
+      .single();
+
+    const previousStage = profile?.detected_stage as StudentStage | undefined;
+
+    // Detect stage from current message
+    const currentDetection = detectStudentStage({ currentStage: newMessage });
+    const currentStage = currentDetection.stage;
+    const currentConfidence = currentDetection.confidence;
+
+    // Check for override
+    const override = detectStageOverride(previousStage, newMessage);
+
+    if (override.hasOverride && override.shouldUpdate && override.newStage && userId) {
+      // Update to new stage
+      await supabase
+        .from('profiles')
+        .update({
+          detected_stage: override.newStage,
+          stage_confidence: currentConfidence,
+          stage_last_updated: new Date().toISOString(),
+        })
+        .eq('id', userId);
+
+      // Log the override
+      await supabase.from('chat_stage_overrides').insert({
+        user_id: userId,
+        previous_stage: previousStage,
+        new_stage: override.newStage,
+        message_number: 1, // This would be computed from history length in real impl
+        reason: 'student_contradiction',
+      });
+
+      stageOverrideNote = `[INTERNAL: Stage override - ${override.reason}]`;
+      detectedStage = override.newStage;
+      stageConfidence = currentConfidence;
+      stageConfirmation = `[INTERNAL: Updated stage to ${override.newStage}. Previous: ${previousStage}]`;
+    } else {
+      // Use current detection (consistent or insufficient confidence)
+      await supabase
+        .from('profiles')
+        .update({
+          detected_stage: currentStage !== StudentStage.UNKNOWN ? currentStage : previousStage,
+          stage_confidence: currentConfidence,
+          stage_last_updated: new Date().toISOString(),
+        })
+        .eq('id', userId);
+
+      detectedStage = currentStage !== StudentStage.UNKNOWN ? currentStage : (previousStage ?? 'unknown');
+      stageConfidence = currentConfidence;
+      stageConfirmation = `[INTERNAL: Confirmed stage ${detectedStage} with ${stageConfidence}% confidence]`;
+    }
+  } catch (error) {
+    console.warn('Failed to load/persist stage:', error);
+    // Fallback to current detection
+    const result = detectStudentStage({ currentStage: newMessage });
+    detectedStage = result.stage;
+    stageConfidence = result.confidence;
+  }
+
+  return {
+    detectedStage,
+    stageConfidence,
+    stageOverrideNote,
+    stageConfirmation,
+  };
+}
+
 export async function POST(request: NextRequest) {
   try {
     const body = (await request.json()) as ChatRequestBody;
@@ -217,6 +342,7 @@ export async function POST(request: NextRequest) {
       ? getDefaultScriptPreference(preferredLanguage)
       : normalizeScriptPreference(body.scriptPreference);
     const voiceMode = Boolean(body.voiceMode);
+    const requestedStageFromBody = sanitizeDetectedStage(body.detectedStage);
     const historyLimit = voiceMode ? 12 : MAX_HISTORY;
     const studentIntake = sanitizeStudentIntake(body.studentIntake);
     const explicitSelectedRole = sanitizeSelectedRole(body.selectedRole) ?? sanitizeSelectedRole(studentIntake?.targetRole);
@@ -230,6 +356,14 @@ export async function POST(request: NextRequest) {
     let ageTier: AgeTier = 'discoverer';
     let recentMessages: Array<{ role: string; content: string }> = clientHistory.slice(-historyLimit);
     let assessmentContext = '';
+    let assessmentProgress = 0;
+    let completedGamesCount = 0;
+    let stageConsiderations = {
+      detectedStage: requestedStageFromBody,
+      stageConfidence: 0,
+      stageOverrideNote: '',
+      stageConfirmation: '',
+    };
 
     if (hasSupabaseServerConfig()) {
       try {
@@ -241,7 +375,7 @@ export async function POST(request: NextRequest) {
 
           const { data: profile } = await supabase
             .from('profiles')
-            .select('date_of_birth, full_name')
+            .select('date_of_birth, full_name, detected_stage, stage_confidence')
             .eq('id', user.id)
             .single();
 
@@ -263,14 +397,43 @@ export async function POST(request: NextRequest) {
             .eq('user_id', user.id)
             .single();
 
+          assessmentProgress = Number(assessmentProfile?.assessment_progress ?? 0);
+          completedGamesCount = Array.isArray(assessmentProfile?.completed_games)
+            ? assessmentProfile.completed_games.length
+            : 0;
+
           if (assessmentProfile && assessmentProfile.assessment_progress > 0) {
             assessmentContext = buildProfileContext(assessmentProfile, studentName ?? undefined);
+          }
+
+          // Load and persist stage
+          if (!voiceSessionStart && message) {
+            stageConsiderations = await loadAndPersistStage(supabase, userId, message, requestedStageFromBody);
           }
         }
       } catch (error) {
         console.warn('Supabase unavailable for chat route, falling back to session mode:', error);
       }
     }
+
+    // Fallback stage detection if no Supabase
+    if (!stageConsiderations.detectedStage && !voiceSessionStart && message) {
+      const result = detectStudentStage({ currentStage: message });
+      stageConsiderations = {
+        detectedStage: result.stage,
+        stageConfidence: result.confidence,
+        stageOverrideNote: '',
+        stageConfirmation: `[INTERNAL: Detected stage ${result.stage} with ${result.confidence}% confidence]`,
+      };
+    }
+
+    const detectedStage = stageConsiderations.detectedStage;
+    const stageContext = detectedStage ? `\nDetected guidance stage: ${detectedStage}` : '';
+    const counselingTrack = deriveCounselingTrack({
+      currentStage: studentIntake?.currentStage,
+      currentSituation: studentIntake?.currentSituation,
+      detectedStage,
+    });
 
     const userTurns = (recentMessages ?? []).filter((item) => item.role === 'user').length;
     const journeyDay = Math.min(7, Math.floor(userTurns / 4) + 1);
@@ -289,11 +452,37 @@ export async function POST(request: NextRequest) {
       selectedRole,
       journeyDay,
       assessmentContext,
-      studentIntakeContext,
+      detectedStageHint: detectedStage ?? studentIntake?.currentStage,
+      counselingTrack,
+      studentIntakeContext: `${studentIntakeContext}${stageContext}`,
+    });
+
+    const knowledgeRetrievalMode = resolveKnowledgeRetrievalMode();
+    const knowledgeDecision = buildKnowledgeDecision({
+      selectedRole,
+      latestMessage: message,
+      detectedStage,
+      counselingTrack,
+      studentIntake,
+      maxResults: 3,
+      retrievalMode: knowledgeRetrievalMode,
+    });
+    const knowledgeBaseTopRoles = knowledgeDecision.rankedRoles;
+    const knowledgeBaseContext = buildKnowledgeBasePromptBlock({
+      selectedRole,
+      latestMessage: message,
+      detectedStage,
+      counselingTrack,
+      studentIntake,
+      maxResults: 3,
+      retrievalMode: knowledgeRetrievalMode,
+      currentTurnNumber,
     });
 
     // Phase 1: Detect contradictions in recent message history
     let contradictionContext = '';
+    let unresolvedContradictionsCount = 0;
+    let unresolvedHighContradictionsCount = 0;
     if (!voiceSessionStart && message && (recentMessages ?? []).length > 2) {
       const recentUserMessages = (recentMessages ?? [])
         .filter(m => m.role === 'user')
@@ -303,6 +492,8 @@ export async function POST(request: NextRequest) {
       if (recentUserMessages.length > 1) {
         const currentSignal = { source: 'chat', value: message, dimension: 'career_exploration' };
         const detectedContradictions = detectContradictions(currentSignal, recentUserMessages);
+        unresolvedContradictionsCount = detectedContradictions.length;
+        unresolvedHighContradictionsCount = detectedContradictions.filter((item) => item.severity === 'high').length;
 
         if (detectedContradictions.length > 0) {
           const reprobe = getCounselorReprobeForContradiction(detectedContradictions[0]);
@@ -312,9 +503,57 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    // Add stage confirmation to internal context
+    let stageConfirmationContext = stageConsiderations.stageConfirmation ? `\n${stageConsiderations.stageConfirmation}` : '';
+    if (stageConsiderations.stageOverrideNote) {
+      stageConfirmationContext += `\n${stageConsiderations.stageOverrideNote}`;
+    }
+
+    const hasConstraintProfile = Boolean(
+      studentIntake?.stateOrCity ||
+      studentIntake?.comparisonFocus ||
+      studentIntake?.currentSituation ||
+      studentIntake?.stressors ||
+      studentIntake?.confusion
+    );
+    const hasFamilyContext = Boolean(studentIntake?.familyPressure);
+    const recommendationGate = buildRecommendationGateDecision({
+      currentTurnNumber,
+      detectedStage,
+      assessmentProgress,
+      completedGamesCount,
+      hasConstraintProfile,
+      hasFamilyContext,
+      unresolvedContradictionsCount,
+      unresolvedHighContradictionsCount,
+      hasRoleFocus: Boolean(selectedRole),
+      retrievalConfidence: knowledgeDecision.confidence,
+    });
+    const recommendationGateContext = recommendationGate.isUnlocked
+      ? `\n[INTERNAL: Recommendation gate UNLOCKED (${recommendationGate.progressPercent}% progress). You may provide a ranked shortlist only with explicit confidence rationale, alternatives, and next validation action.]`
+      : `\n[INTERNAL: Recommendation gate LOCKED (${recommendationGate.progressPercent}% progress). Do NOT provide final ranked recommendations yet. Focus on evidence gathering and ask this exact next question: "${recommendationGate.nextBestQuestion}". Top blockers: ${recommendationGate.blockingGates.slice(0, 3).map((item) => item.name).join(', ') || 'none'}]`;
+
     const history = (recentMessages ?? []).map((m) => ({ role: m.role as 'user' | 'assistant', content: m.content }));
+    
+    // Apply Market Reality Engine
+    const affordability = studentIntake?.stressors?.toLowerCase().includes('finan') ? 'tight' : 'accessible'; // Map 'financial' to tight Budget
+    const resolvedRoles = knowledgeDecision.rankedRoles.map(r => careerDatabase.find(c => c.id === r.id)).filter(Boolean) as typeof careerDatabase;
+    const marketRealityContext = `\n[MARKET REALITY ENGINE LOGS]:\n` + applyMarketRealities(resolvedRoles, {
+      affordability_level: affordability as 'tight' | 'accessible' | 'aspirational',
+      tier: 'tier3'
+    }).map(r => `Role ID: ${r.careerId}\nChecks: ${r.reality_check_notes.join(', ') || 'OK'}\nAdjusted Salary: ${r.adjusted_salary_inr}`)
+      .join('\n\n');
+
+    const knowledgeClarificationContext = knowledgeDecision.clarifyingQuestion  
+      ? `\n[INTERNAL: Retrieval confidence is low (${knowledgeDecision.confidence}/100). Ask exactly this one clarifying question before hard narrowing: "${knowledgeDecision.clarifyingQuestion}"]`
+      : '';
+      
+    // Apply Confusion Diagnosis Engine
+    const confusionDiagnosis = diagnoseConfusion(studentIntake?.confusion, studentIntake?.stressors, studentIntake?.familyPressure);
+    const confusionDiagnosisContext = confusionDiagnosis.counselingProtocol ? `\n\n${confusionDiagnosis.counselingProtocol}` : '';
+
     const apiMessages: { role: 'system' | 'user' | 'assistant'; content: string }[] = [
-      { role: 'system', content: systemPrompt + contradictionContext },
+      { role: 'system', content: `${systemPrompt}${contradictionContext}${stageConfirmationContext}${knowledgeClarificationContext}${recommendationGateContext}${marketRealityContext}${confusionDiagnosisContext}\n\n${knowledgeBaseContext}` },
       ...(voiceMode
         ? [{
             role: 'system' as const,
@@ -325,12 +564,24 @@ export async function POST(request: NextRequest) {
       { role: 'user', content: effectiveMessage },
     ];
 
-    const reply = await getChatCompletion(apiMessages, {
+    const rawReply = await getChatCompletion(apiMessages, {
       temperature: 0.78,
       max_tokens: voiceMode ? 320 : 200,
     });
 
+    const { cleanedResponse: reply, actionItems } = extractActionItems(rawReply);
+
     if (supabase && userId) {
+      if (actionItems.length > 0) {
+        const actionRows = actionItems.map((item) => ({
+          user_id: userId,
+          title: item.description,
+          description: null,
+          status: 'pending',
+          due_date: new Date(Date.now() + item.dueDays * 24 * 60 * 60 * 1000).toISOString(),
+        }));
+        await supabase.from('student_action_items').insert(actionRows);
+      }
       const rows = voiceSessionStart
         ? [
             {
@@ -342,10 +593,15 @@ export async function POST(request: NextRequest) {
                 conversation_style: conversationStyle,
                 script_preference: scriptPreference,
                 selected_role: selectedRole,
+                counseling_track: counselingTrack,
+                detected_stage: detectedStage,
+                intake_snapshot: studentIntake,
                 journey_day: journeyDay,
                 has_starting_intake: Boolean(studentIntakeContext),
                 voice_mode: voiceMode,
                 voice_session_start: true,
+                recommendation_gate_unlocked: recommendationGate.isUnlocked,
+                recommendation_gate_progress: recommendationGate.progressPercent,
               },
             },
           ]
@@ -359,9 +615,14 @@ export async function POST(request: NextRequest) {
                 conversation_style: conversationStyle,
                 script_preference: scriptPreference,
                 selected_role: selectedRole,
+                counseling_track: counselingTrack,
+                detected_stage: detectedStage,
+                intake_snapshot: studentIntake,
                 journey_day: journeyDay,
                 has_starting_intake: Boolean(studentIntakeContext),
                 voice_mode: voiceMode,
+                recommendation_gate_unlocked: recommendationGate.isUnlocked,
+                recommendation_gate_progress: recommendationGate.progressPercent,
               },
             },
             {
@@ -373,14 +634,35 @@ export async function POST(request: NextRequest) {
                 conversation_style: conversationStyle,
                 script_preference: scriptPreference,
                 selected_role: selectedRole,
+                counseling_track: counselingTrack,
+                detected_stage: detectedStage,
+                intake_snapshot: studentIntake,
                 journey_day: journeyDay,
                 has_starting_intake: Boolean(studentIntakeContext),
                 voice_mode: voiceMode,
+                recommendation_gate_unlocked: recommendationGate.isUnlocked,
+                recommendation_gate_progress: recommendationGate.progressPercent,
               },
             },
           ];
 
       await supabase.from('chat_messages').insert(rows);
+
+      await supabase.from('knowledge_retrieval_events').insert({
+        user_id: userId,
+        retrieval_mode: knowledgeDecision.retrievalMode,
+        detected_stage: detectedStage,
+        counseling_track: counselingTrack,
+        city_context: knowledgeDecision.city ?? studentIntake?.stateOrCity ?? null,
+        tier_context: knowledgeDecision.tier,
+        confidence_score: knowledgeDecision.confidence,
+        clarifying_question: knowledgeDecision.clarifyingQuestion ?? null,
+        top_role_1: knowledgeBaseTopRoles[0]?.title ?? null,
+        top_role_2: knowledgeBaseTopRoles[1]?.title ?? null,
+        top_role_3: knowledgeBaseTopRoles[2]?.title ?? null,
+        selected_role: selectedRole ?? null,
+        latest_message_excerpt: (message ?? '').slice(0, 240),
+      });
 
       const messageCount = (recentMessages?.length ?? 0) + 2;
       if (messageCount % 10 === 0 && messageCount > 0) {
@@ -395,10 +677,29 @@ export async function POST(request: NextRequest) {
         conversationStyle,
         scriptPreference,
         selectedRole,
+        counselingTrack,
         journeyDay,
         hasStartingIntake: Boolean(studentIntakeContext),
         voiceMode,
         voiceSessionStart,
+        knowledgeBaseTopRoles: knowledgeBaseTopRoles.map((item) => item.title),
+        knowledgeBaseConfidence: knowledgeDecision.confidence,
+        knowledgeBaseTier: knowledgeDecision.tier,
+        knowledgeBaseCity: knowledgeDecision.city,
+        knowledgeBaseMode: knowledgeDecision.retrievalMode,
+        knowledgeBaseClarifyingQuestion: knowledgeDecision.clarifyingQuestion,
+        recommendationGate: {
+          stage: recommendationGate.stage,
+          isUnlocked: recommendationGate.isUnlocked,
+          progressPercent: recommendationGate.progressPercent,
+          nextBestQuestion: recommendationGate.nextBestQuestion,
+          blockers: recommendationGate.blockingGates.map((item) => ({
+            name: item.name,
+            requirement: item.requirement,
+            currentStatus: item.currentStatus,
+          })),
+          dossier: recommendationGate.dossier,
+        },
         persistenceMode: userId ? 'supabase' : 'session',
       },
     });
@@ -513,6 +814,7 @@ ${recentUserMessages}`;
       })
       .eq('user_id', userId);
   } catch {
-    // Silent fail — extraction is best-effort
+    // Silent fail â€” extraction is best-effort
   }
 }
+

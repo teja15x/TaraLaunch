@@ -1,0 +1,2494 @@
+{
+  "version": "1.0.0",
+  "generatedAt": "2026-04-01T17:20:25.206Z",
+  "minTarget": 100,
+  "items": [
+    {
+      "id": "doctor",
+      "title": "Doctor",
+      "roleFamily": "healthcare",
+      "pathHint": "NEET, MBBS, residency, specialization, hospital or clinic practice",
+      "tags": [
+        "doctor",
+        "neet",
+        "mbbs",
+        "residency",
+        "specialization",
+        "hospital",
+        "clinic",
+        "practice"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "pre-12th",
+        "post-12th"
+      ]
+    },
+    {
+      "id": "software-engineer",
+      "title": "Software Engineer",
+      "roleFamily": "technology",
+      "pathHint": "CS degree or strong projects, coding, internships, product or service companies",
+      "tags": [
+        "software-engineer",
+        "degree",
+        "strong",
+        "projects",
+        "coding",
+        "internships",
+        "product",
+        "service"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "data-scientist",
+      "title": "Data Scientist",
+      "roleFamily": "technology",
+      "pathHint": "Math, statistics, Python, machine learning, portfolio and internships",
+      "tags": [
+        "data-scientist",
+        "math",
+        "statistics",
+        "python",
+        "machine",
+        "learning",
+        "portfolio",
+        "and"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "ai-ml-engineer",
+      "title": "AI / ML Engineer",
+      "roleFamily": "technology",
+      "pathHint": "Python, model building, evaluation, deployment, MLOps and practical AI systems",
+      "tags": [
+        "ai-ml-engineer",
+        "python",
+        "model",
+        "building",
+        "evaluation",
+        "deployment",
+        "mlops",
+        "and"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "data-analyst",
+      "title": "Data Analyst",
+      "roleFamily": "technology",
+      "pathHint": "Excel, SQL, dashboards, business thinking, analytics projects and internships",
+      "tags": [
+        "data-analyst",
+        "excel",
+        "sql",
+        "dashboards",
+        "business",
+        "thinking",
+        "analytics",
+        "projects"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "cybersecurity-analyst",
+      "title": "Cybersecurity Analyst",
+      "roleFamily": "technology",
+      "pathHint": "Networking, monitoring, security basics, certifications and incident response",
+      "tags": [
+        "cybersecurity-analyst",
+        "networking",
+        "monitoring",
+        "security",
+        "basics",
+        "certifications",
+        "and",
+        "incident"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "cloud-engineer",
+      "title": "Cloud Engineer",
+      "roleFamily": "technology",
+      "pathHint": "Cloud platforms, deployment, infrastructure, automation and system operations",
+      "tags": [
+        "cloud-engineer",
+        "cloud",
+        "platforms",
+        "deployment",
+        "infrastructure",
+        "automation",
+        "and",
+        "system"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "devops-engineer",
+      "title": "DevOps Engineer",
+      "roleFamily": "technology",
+      "pathHint": "CI/CD, Linux, automation, containers, reliability and release systems",
+      "tags": [
+        "devops-engineer",
+        "linux",
+        "automation",
+        "containers",
+        "reliability",
+        "and",
+        "release",
+        "systems"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "chartered-accountant",
+      "title": "Chartered Accountant",
+      "roleFamily": "finance",
+      "pathHint": "CA Foundation to Final, articleship, audit, finance, taxation",
+      "tags": [
+        "chartered-accountant",
+        "foundation",
+        "final",
+        "articleship",
+        "audit",
+        "finance",
+        "taxation"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "pre-12th",
+        "post-12th"
+      ]
+    },
+    {
+      "id": "company-secretary",
+      "title": "Company Secretary",
+      "roleFamily": "exploration",
+      "pathHint": "Compliance, governance, legal-business work and corporate procedure",
+      "tags": [
+        "company-secretary",
+        "compliance",
+        "governance",
+        "legal-business",
+        "work",
+        "and",
+        "corporate",
+        "procedure"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "cost-accountant",
+      "title": "Cost Accountant",
+      "roleFamily": "finance",
+      "pathHint": "CMA route, costing, planning, finance control and industry operations",
+      "tags": [
+        "cost-accountant",
+        "cma",
+        "route",
+        "costing",
+        "planning",
+        "finance",
+        "control",
+        "and"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "financial-analyst",
+      "title": "Financial Analyst",
+      "roleFamily": "finance",
+      "pathHint": "Accounting, modeling, reporting, markets and finance fundamentals",
+      "tags": [
+        "financial-analyst",
+        "accounting",
+        "modeling",
+        "reporting",
+        "markets",
+        "and",
+        "finance",
+        "fundamentals"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "investment-banker",
+      "title": "Investment Banker",
+      "roleFamily": "finance",
+      "pathHint": "Valuation, corporate finance, intense analysis, communication and elite entry routes",
+      "tags": [
+        "investment-banker",
+        "valuation",
+        "corporate",
+        "finance",
+        "intense",
+        "analysis",
+        "communication",
+        "and"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "civil-services-ias-ips",
+      "title": "Civil Services (IAS/IPS)",
+      "roleFamily": "law-governance",
+      "pathHint": "UPSC preparation, optional choice, interview, public service track",
+      "tags": [
+        "civil-services-ias-ips",
+        "upsc",
+        "preparation",
+        "optional",
+        "choice",
+        "interview",
+        "public",
+        "service"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "state-public-service-officer",
+      "title": "State Public Service Officer",
+      "roleFamily": "law-governance",
+      "pathHint": "Group exams, administration, policy, state service and discipline",
+      "tags": [
+        "state-public-service-officer",
+        "group",
+        "exams",
+        "administration",
+        "policy",
+        "state",
+        "service",
+        "and"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "defense-officer",
+      "title": "Defense Officer",
+      "roleFamily": "finance",
+      "pathHint": "NDA, CDS, AFCAT or technical defense routes with service mindset and fitness",
+      "tags": [
+        "defense-officer",
+        "nda",
+        "cds",
+        "afcat",
+        "technical",
+        "defense",
+        "routes",
+        "with"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "lawyer",
+      "title": "Lawyer",
+      "roleFamily": "law-governance",
+      "pathHint": "CLAT or LLB route, internships, litigation or corporate law",
+      "tags": [
+        "lawyer",
+        "clat",
+        "llb",
+        "route",
+        "internships",
+        "litigation",
+        "corporate",
+        "law"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "judge-judicial-services",
+      "title": "Judge / Judicial Services",
+      "roleFamily": "finance",
+      "pathHint": "Law degree, judicial exams, case reasoning and long-term legal preparation",
+      "tags": [
+        "judge-judicial-services",
+        "law",
+        "degree",
+        "judicial",
+        "exams",
+        "case",
+        "reasoning",
+        "and"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "psychologist",
+      "title": "Psychologist",
+      "roleFamily": "finance",
+      "pathHint": "Psychology degree, masters, counseling or clinical specialization",
+      "tags": [
+        "psychologist",
+        "psychology",
+        "degree",
+        "masters",
+        "counseling",
+        "clinical",
+        "specialization"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "clinical-psychologist",
+      "title": "Clinical Psychologist",
+      "roleFamily": "finance",
+      "pathHint": "Psychology route, masters, therapy, assessment and licensed clinical work",
+      "tags": [
+        "clinical-psychologist",
+        "psychology",
+        "route",
+        "masters",
+        "therapy",
+        "assessment",
+        "and",
+        "licensed"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "counselor",
+      "title": "Counselor",
+      "roleFamily": "finance",
+      "pathHint": "Helping profession, psychology or social work route, empathy and communication",
+      "tags": [
+        "counselor",
+        "helping",
+        "profession",
+        "psychology",
+        "social",
+        "work",
+        "route",
+        "empathy"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "product-designer",
+      "title": "Product Designer",
+      "roleFamily": "finance",
+      "pathHint": "Design fundamentals, UX case studies, portfolio, internships",
+      "tags": [
+        "product-designer",
+        "design",
+        "fundamentals",
+        "case",
+        "studies",
+        "portfolio",
+        "internships"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "ui-ux-designer",
+      "title": "UI/UX Designer",
+      "roleFamily": "finance",
+      "pathHint": "User research, interaction design, Figma, case studies and product thinking",
+      "tags": [
+        "ui-ux-designer",
+        "user",
+        "research",
+        "interaction",
+        "design",
+        "figma",
+        "case",
+        "studies"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "graphic-designer",
+      "title": "Graphic Designer",
+      "roleFamily": "design-creative",
+      "pathHint": "Visual design, branding, layout systems, portfolio and client projects",
+      "tags": [
+        "graphic-designer",
+        "visual",
+        "design",
+        "branding",
+        "layout",
+        "systems",
+        "portfolio",
+        "and"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "animator",
+      "title": "Animator",
+      "roleFamily": "design-creative",
+      "pathHint": "2D or 3D animation, storytelling, motion, practice and studio or freelance work",
+      "tags": [
+        "animator",
+        "animation",
+        "storytelling",
+        "motion",
+        "practice",
+        "and",
+        "studio",
+        "freelance"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "game-designer",
+      "title": "Game Designer",
+      "roleFamily": "design-creative",
+      "pathHint": "Gameplay systems, psychology, prototyping, balancing and narrative design",
+      "tags": [
+        "game-designer",
+        "gameplay",
+        "systems",
+        "psychology",
+        "prototyping",
+        "balancing",
+        "and",
+        "narrative"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "game-developer",
+      "title": "Game Developer",
+      "roleFamily": "finance",
+      "pathHint": "Programming, Unity or Unreal, graphics basics and production workflows",
+      "tags": [
+        "game-developer",
+        "programming",
+        "unity",
+        "unreal",
+        "graphics",
+        "basics",
+        "and",
+        "production"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "digital-marketer",
+      "title": "Digital Marketer",
+      "roleFamily": "finance",
+      "pathHint": "Content, analytics, SEO, ads, growth strategy, freelancing or agency work",
+      "tags": [
+        "digital-marketer",
+        "content",
+        "analytics",
+        "seo",
+        "ads",
+        "growth",
+        "strategy",
+        "freelancing"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "content-strategist",
+      "title": "Content Strategist",
+      "roleFamily": "technology",
+      "pathHint": "Writing, audience understanding, planning, campaigns and communication systems",
+      "tags": [
+        "content-strategist",
+        "writing",
+        "audience",
+        "understanding",
+        "planning",
+        "campaigns",
+        "and",
+        "communication"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "journalist",
+      "title": "Journalist",
+      "roleFamily": "technology",
+      "pathHint": "Reporting, research, writing, field exposure, current affairs and media ethics",
+      "tags": [
+        "journalist",
+        "reporting",
+        "research",
+        "writing",
+        "field",
+        "exposure",
+        "current",
+        "affairs"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "youtuber-creator",
+      "title": "YouTuber / Creator",
+      "roleFamily": "media-communication",
+      "pathHint": "Content consistency, editing, niche clarity, audience growth and monetization",
+      "tags": [
+        "youtuber-creator",
+        "content",
+        "consistency",
+        "editing",
+        "niche",
+        "clarity",
+        "audience",
+        "growth"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "entrepreneur",
+      "title": "Entrepreneur",
+      "roleFamily": "design-creative",
+      "pathHint": "Problem solving, validation, product building, sales, persistence",
+      "tags": [
+        "entrepreneur",
+        "problem",
+        "solving",
+        "validation",
+        "product",
+        "building",
+        "sales",
+        "persistence"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "teacher",
+      "title": "Teacher",
+      "roleFamily": "finance",
+      "pathHint": "Subject depth, B.Ed or related route, communication, mentoring",
+      "tags": [
+        "teacher",
+        "subject",
+        "depth",
+        "b-ed",
+        "related",
+        "route",
+        "communication",
+        "mentoring"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "professor-lecturer",
+      "title": "Professor / Lecturer",
+      "roleFamily": "education-research",
+      "pathHint": "Higher studies, NET or SET, research, teaching and subject expertise",
+      "tags": [
+        "professor-lecturer",
+        "higher",
+        "studies",
+        "net",
+        "set",
+        "research",
+        "teaching",
+        "and"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "architect",
+      "title": "Architect",
+      "roleFamily": "exploration",
+      "pathHint": "NATA or JEE Paper 2, design thinking, studio work, project practice",
+      "tags": [
+        "architect",
+        "nata",
+        "jee",
+        "paper",
+        "design",
+        "thinking",
+        "studio",
+        "work"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "pre-12th",
+        "post-12th"
+      ]
+    },
+    {
+      "id": "interior-designer",
+      "title": "Interior Designer",
+      "roleFamily": "finance",
+      "pathHint": "Spatial design, materials, aesthetics, client work and execution",
+      "tags": [
+        "interior-designer",
+        "spatial",
+        "design",
+        "materials",
+        "aesthetics",
+        "client",
+        "work",
+        "and"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "urban-planner",
+      "title": "Urban Planner",
+      "roleFamily": "exploration",
+      "pathHint": "Cities, infrastructure, planning systems, policy and long-term design thinking",
+      "tags": [
+        "urban-planner",
+        "cities",
+        "infrastructure",
+        "planning",
+        "systems",
+        "policy",
+        "and",
+        "long-term"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "pilot",
+      "title": "Pilot",
+      "roleFamily": "finance",
+      "pathHint": "Medical fitness, flying school, licenses, aviation discipline",
+      "tags": [
+        "pilot",
+        "medical",
+        "fitness",
+        "flying",
+        "school",
+        "licenses",
+        "aviation",
+        "discipline"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "cabin-crew",
+      "title": "Cabin Crew",
+      "roleFamily": "technology",
+      "pathHint": "Communication, presentation, travel readiness, service and airline selection",
+      "tags": [
+        "cabin-crew",
+        "communication",
+        "presentation",
+        "travel",
+        "readiness",
+        "service",
+        "and",
+        "airline"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "fashion-designer",
+      "title": "Fashion Designer",
+      "roleFamily": "design-creative",
+      "pathHint": "Design entrance, portfolio, material understanding, trend and craft sense",
+      "tags": [
+        "fashion-designer",
+        "design",
+        "entrance",
+        "portfolio",
+        "material",
+        "understanding",
+        "trend",
+        "and"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "dentist",
+      "title": "Dentist",
+      "roleFamily": "finance",
+      "pathHint": "NEET, BDS, clinical work, specialization and patient care",
+      "tags": [
+        "dentist",
+        "neet",
+        "bds",
+        "clinical",
+        "work",
+        "specialization",
+        "and",
+        "patient"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "pre-12th",
+        "post-12th"
+      ]
+    },
+    {
+      "id": "pharmacist",
+      "title": "Pharmacist",
+      "roleFamily": "technology",
+      "pathHint": "BPharm or PharmD, medicines, healthcare systems and research or retail roles",
+      "tags": [
+        "pharmacist",
+        "bpharm",
+        "pharmd",
+        "medicines",
+        "healthcare",
+        "systems",
+        "and",
+        "research"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "nurse",
+      "title": "Nurse",
+      "roleFamily": "finance",
+      "pathHint": "Nursing degree, patient care, hospital systems, compassion and discipline",
+      "tags": [
+        "nurse",
+        "nursing",
+        "degree",
+        "patient",
+        "care",
+        "hospital",
+        "systems",
+        "compassion"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "physiotherapist",
+      "title": "Physiotherapist",
+      "roleFamily": "finance",
+      "pathHint": "BPT route, rehab, sports or clinical movement-focused work",
+      "tags": [
+        "physiotherapist",
+        "bpt",
+        "route",
+        "rehab",
+        "sports",
+        "clinical",
+        "movement-focused",
+        "work"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "nutritionist-dietitian",
+      "title": "Nutritionist / Dietitian",
+      "roleFamily": "healthcare",
+      "pathHint": "Food science, health guidance, lifestyle planning and wellness support",
+      "tags": [
+        "nutritionist-dietitian",
+        "food",
+        "science",
+        "health",
+        "guidance",
+        "lifestyle",
+        "planning",
+        "and"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "biotechnologist",
+      "title": "Biotechnologist",
+      "roleFamily": "finance",
+      "pathHint": "Biology, labs, research, industry applications and life science routes",
+      "tags": [
+        "biotechnologist",
+        "biology",
+        "labs",
+        "research",
+        "industry",
+        "applications",
+        "and",
+        "life"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "research-scientist",
+      "title": "Research Scientist",
+      "roleFamily": "finance",
+      "pathHint": "Strong academics, labs, problem solving, masters or PhD and long-term research work",
+      "tags": [
+        "research-scientist",
+        "strong",
+        "academics",
+        "labs",
+        "problem",
+        "solving",
+        "masters",
+        "phd"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "mechanical-engineer",
+      "title": "Mechanical Engineer",
+      "roleFamily": "finance",
+      "pathHint": "Core engineering, design, manufacturing, thermal and industrial systems",
+      "tags": [
+        "mechanical-engineer",
+        "core",
+        "engineering",
+        "design",
+        "manufacturing",
+        "thermal",
+        "and",
+        "industrial"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "civil-engineer",
+      "title": "Civil Engineer",
+      "roleFamily": "engineering-core",
+      "pathHint": "Construction, infrastructure, site work, planning and structural systems",
+      "tags": [
+        "civil-engineer",
+        "construction",
+        "infrastructure",
+        "site",
+        "work",
+        "planning",
+        "and",
+        "structural"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "electrical-engineer",
+      "title": "Electrical Engineer",
+      "roleFamily": "finance",
+      "pathHint": "Circuits, systems, power, electronics and industrial applications",
+      "tags": [
+        "electrical-engineer",
+        "circuits",
+        "systems",
+        "power",
+        "electronics",
+        "and",
+        "industrial",
+        "applications"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "electronics-engineer",
+      "title": "Electronics Engineer",
+      "roleFamily": "finance",
+      "pathHint": "Embedded systems, circuits, communication and hardware product work",
+      "tags": [
+        "electronics-engineer",
+        "embedded",
+        "systems",
+        "circuits",
+        "communication",
+        "and",
+        "hardware",
+        "product"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "robotics-engineer",
+      "title": "Robotics Engineer",
+      "roleFamily": "finance",
+      "pathHint": "Mechanics, electronics, coding, automation and intelligent systems",
+      "tags": [
+        "robotics-engineer",
+        "mechanics",
+        "electronics",
+        "coding",
+        "automation",
+        "and",
+        "intelligent",
+        "systems"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "automobile-engineer",
+      "title": "Automobile Engineer",
+      "roleFamily": "finance",
+      "pathHint": "Vehicles, mechanics, testing, design and manufacturing systems",
+      "tags": [
+        "automobile-engineer",
+        "vehicles",
+        "mechanics",
+        "testing",
+        "design",
+        "and",
+        "manufacturing",
+        "systems"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "agricultural-scientist",
+      "title": "Agricultural Scientist",
+      "roleFamily": "technology",
+      "pathHint": "Agriculture, crop science, sustainability, field research and rural impact",
+      "tags": [
+        "agricultural-scientist",
+        "agriculture",
+        "crop",
+        "science",
+        "sustainability",
+        "field",
+        "research",
+        "and"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "environmental-scientist",
+      "title": "Environmental Scientist",
+      "roleFamily": "technology",
+      "pathHint": "Climate, environment, analysis, sustainability and policy pathways",
+      "tags": [
+        "environmental-scientist",
+        "climate",
+        "environment",
+        "analysis",
+        "sustainability",
+        "and",
+        "policy",
+        "pathways"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "hotel-manager",
+      "title": "Hotel Manager",
+      "roleFamily": "business-management",
+      "pathHint": "Service, hospitality operations, people management and business discipline",
+      "tags": [
+        "hotel-manager",
+        "service",
+        "hospitality",
+        "operations",
+        "people",
+        "management",
+        "and",
+        "business"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "chef",
+      "title": "Chef",
+      "roleFamily": "hospitality-services",
+      "pathHint": "Culinary skill, kitchen discipline, creativity and hospitality growth",
+      "tags": [
+        "chef",
+        "culinary",
+        "skill",
+        "kitchen",
+        "discipline",
+        "creativity",
+        "and",
+        "hospitality"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "event-manager",
+      "title": "Event Manager",
+      "roleFamily": "business-management",
+      "pathHint": "Planning, coordination, operations, creativity and people management",
+      "tags": [
+        "event-manager",
+        "planning",
+        "coordination",
+        "operations",
+        "creativity",
+        "and",
+        "people",
+        "management"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "sports-professional",
+      "title": "Sports Professional",
+      "roleFamily": "sports-performance",
+      "pathHint": "Athletic route, coaching, performance, discipline and backup planning",
+      "tags": [
+        "sports-professional",
+        "athletic",
+        "route",
+        "coaching",
+        "performance",
+        "discipline",
+        "and",
+        "backup"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "sports-analyst",
+      "title": "Sports Analyst",
+      "roleFamily": "technology",
+      "pathHint": "Sports knowledge, data, media insight and performance analysis roles",
+      "tags": [
+        "sports-analyst",
+        "sports",
+        "knowledge",
+        "data",
+        "media",
+        "insight",
+        "and",
+        "performance"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "actor-performer",
+      "title": "Actor / Performer",
+      "roleFamily": "technology",
+      "pathHint": "Training, auditions, performance craft, visibility and resilience",
+      "tags": [
+        "actor-performer",
+        "training",
+        "auditions",
+        "performance",
+        "craft",
+        "visibility",
+        "and",
+        "resilience"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "musician",
+      "title": "Musician",
+      "roleFamily": "exploration",
+      "pathHint": "Practice, performance, production, discipline and creative growth",
+      "tags": [
+        "musician",
+        "practice",
+        "performance",
+        "production",
+        "discipline",
+        "and",
+        "creative",
+        "growth"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "photographer",
+      "title": "Photographer",
+      "roleFamily": "media-communication",
+      "pathHint": "Visual eye, editing, storytelling, client work and portfolio growth",
+      "tags": [
+        "photographer",
+        "visual",
+        "eye",
+        "editing",
+        "storytelling",
+        "client",
+        "work",
+        "and"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "videographer-editor",
+      "title": "Videographer / Editor",
+      "roleFamily": "media-communication",
+      "pathHint": "Shooting, editing, storytelling and content production workflows",
+      "tags": [
+        "videographer-editor",
+        "shooting",
+        "editing",
+        "storytelling",
+        "and",
+        "content",
+        "production",
+        "workflows"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "translator-interpreter",
+      "title": "Translator / Interpreter",
+      "roleFamily": "finance",
+      "pathHint": "Language mastery, communication, multilingual work and localization",
+      "tags": [
+        "translator-interpreter",
+        "language",
+        "mastery",
+        "communication",
+        "multilingual",
+        "work",
+        "and",
+        "localization"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "air-traffic-controller",
+      "title": "Air Traffic Controller",
+      "roleFamily": "technology",
+      "pathHint": "Precision, focus, aviation systems and high-responsibility decision making",
+      "tags": [
+        "air-traffic-controller",
+        "precision",
+        "focus",
+        "aviation",
+        "systems",
+        "and",
+        "high-responsibility",
+        "decision"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "merchant-navy-officer",
+      "title": "Merchant Navy Officer",
+      "roleFamily": "finance",
+      "pathHint": "Maritime route, technical skill, travel and shipboard life discipline",
+      "tags": [
+        "merchant-navy-officer",
+        "maritime",
+        "route",
+        "technical",
+        "skill",
+        "travel",
+        "and",
+        "shipboard"
+      ],
+      "source": "career-role-options",
+      "confidence": 0.78,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "frontend-developer",
+      "title": "Frontend Developer",
+      "roleFamily": "technology",
+      "pathHint": "HTML, CSS, JavaScript, React, UI implementation and internship portfolio",
+      "tags": [
+        "frontend-developer",
+        "html",
+        "css",
+        "javascript",
+        "react",
+        "implementation",
+        "and",
+        "internship"
+      ],
+      "source": "manual-curation",
+      "confidence": 0.83,
+      "stageFit": [
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "backend-developer",
+      "title": "Backend Developer",
+      "roleFamily": "technology",
+      "pathHint": "APIs, databases, server logic, cloud deployment and system reliability",
+      "tags": [
+        "backend-developer",
+        "apis",
+        "databases",
+        "server",
+        "logic",
+        "cloud",
+        "deployment",
+        "and"
+      ],
+      "source": "manual-curation",
+      "confidence": 0.83,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "full-stack-developer",
+      "title": "Full Stack Developer",
+      "roleFamily": "exploration",
+      "pathHint": "Frontend and backend stack, product thinking, deployment and debugging",
+      "tags": [
+        "full-stack-developer",
+        "frontend",
+        "and",
+        "backend",
+        "stack",
+        "product",
+        "thinking",
+        "deployment"
+      ],
+      "source": "manual-curation",
+      "confidence": 0.83,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "qa-engineer",
+      "title": "QA Engineer",
+      "roleFamily": "exploration",
+      "pathHint": "Test planning, automation, bug tracking, quality gates and release confidence",
+      "tags": [
+        "qa-engineer",
+        "test",
+        "planning",
+        "automation",
+        "bug",
+        "tracking",
+        "quality",
+        "gates"
+      ],
+      "source": "manual-curation",
+      "confidence": 0.83,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "site-reliability-engineer",
+      "title": "Site Reliability Engineer",
+      "roleFamily": "technology",
+      "pathHint": "Monitoring, incident response, reliability, automation and cloud systems",
+      "tags": [
+        "site-reliability-engineer",
+        "monitoring",
+        "incident",
+        "response",
+        "reliability",
+        "automation",
+        "and",
+        "cloud"
+      ],
+      "source": "manual-curation",
+      "confidence": 0.83,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "prompt-engineer",
+      "title": "Prompt Engineer",
+      "roleFamily": "exploration",
+      "pathHint": "LLM prompting, evaluation, safety, workflow design and iterative optimization",
+      "tags": [
+        "prompt-engineer",
+        "llm",
+        "prompting",
+        "evaluation",
+        "safety",
+        "workflow",
+        "design",
+        "and"
+      ],
+      "source": "manual-curation",
+      "confidence": 0.83,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "ai-product-manager",
+      "title": "AI Product Manager",
+      "roleFamily": "technology",
+      "pathHint": "AI feature planning, metrics, user value, model tradeoffs and governance",
+      "tags": [
+        "ai-product-manager",
+        "feature",
+        "planning",
+        "metrics",
+        "user",
+        "value",
+        "model",
+        "tradeoffs"
+      ],
+      "source": "manual-curation",
+      "confidence": 0.83,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "blockchain-developer",
+      "title": "Blockchain Developer",
+      "roleFamily": "technology",
+      "pathHint": "Smart contracts, security, protocol understanding and decentralized app stack",
+      "tags": [
+        "blockchain-developer",
+        "smart",
+        "contracts",
+        "security",
+        "protocol",
+        "understanding",
+        "and",
+        "decentralized"
+      ],
+      "source": "manual-curation",
+      "confidence": 0.83,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "network-engineer",
+      "title": "Network Engineer",
+      "roleFamily": "exploration",
+      "pathHint": "Routing, switching, firewalls, troubleshooting and enterprise infrastructure",
+      "tags": [
+        "network-engineer",
+        "routing",
+        "switching",
+        "firewalls",
+        "troubleshooting",
+        "and",
+        "enterprise",
+        "infrastructure"
+      ],
+      "source": "manual-curation",
+      "confidence": 0.83,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "soc-analyst",
+      "title": "SOC Analyst",
+      "roleFamily": "business-management",
+      "pathHint": "Threat monitoring, SIEM tools, incident triage and security operations workflow",
+      "tags": [
+        "soc-analyst",
+        "threat",
+        "monitoring",
+        "siem",
+        "tools",
+        "incident",
+        "triage",
+        "and"
+      ],
+      "source": "manual-curation",
+      "confidence": 0.83,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "actuary",
+      "title": "Actuary",
+      "roleFamily": "technology",
+      "pathHint": "Probability, statistics, risk modeling, insurance domain exams and financial analysis",
+      "tags": [
+        "actuary",
+        "probability",
+        "statistics",
+        "risk",
+        "modeling",
+        "insurance",
+        "domain",
+        "exams"
+      ],
+      "source": "manual-curation",
+      "confidence": 0.83,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "tax-consultant",
+      "title": "Tax Consultant",
+      "roleFamily": "business-management",
+      "pathHint": "Direct and indirect taxes, compliance, filings and advisory for clients",
+      "tags": [
+        "tax-consultant",
+        "direct",
+        "and",
+        "indirect",
+        "taxes",
+        "compliance",
+        "filings",
+        "advisory"
+      ],
+      "source": "manual-curation",
+      "confidence": 0.83,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "equity-research-analyst",
+      "title": "Equity Research Analyst",
+      "roleFamily": "design-creative",
+      "pathHint": "Company analysis, valuation, financial modeling and markets insight",
+      "tags": [
+        "equity-research-analyst",
+        "company",
+        "analysis",
+        "valuation",
+        "financial",
+        "modeling",
+        "and",
+        "markets"
+      ],
+      "source": "manual-curation",
+      "confidence": 0.83,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "portfolio-manager",
+      "title": "Portfolio Manager",
+      "roleFamily": "finance",
+      "pathHint": "Investment strategy, risk balancing, asset allocation and performance tracking",
+      "tags": [
+        "portfolio-manager",
+        "investment",
+        "strategy",
+        "risk",
+        "balancing",
+        "asset",
+        "allocation",
+        "and"
+      ],
+      "source": "manual-curation",
+      "confidence": 0.83,
+      "stageFit": [
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "financial-planner",
+      "title": "Financial Planner",
+      "roleFamily": "finance",
+      "pathHint": "Personal finance, goal planning, insurance, investments and client advisory",
+      "tags": [
+        "financial-planner",
+        "personal",
+        "finance",
+        "goal",
+        "planning",
+        "insurance",
+        "investments",
+        "and"
+      ],
+      "source": "manual-curation",
+      "confidence": 0.83,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "risk-analyst",
+      "title": "Risk Analyst",
+      "roleFamily": "finance",
+      "pathHint": "Risk frameworks, compliance, analytics and decision support for institutions",
+      "tags": [
+        "risk-analyst",
+        "risk",
+        "frameworks",
+        "compliance",
+        "analytics",
+        "and",
+        "decision",
+        "support"
+      ],
+      "source": "manual-curation",
+      "confidence": 0.83,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "physician-assistant",
+      "title": "Physician Assistant",
+      "roleFamily": "finance",
+      "pathHint": "Clinical support, diagnostics assistance, patient care and protocol-based treatment",
+      "tags": [
+        "physician-assistant",
+        "clinical",
+        "support",
+        "diagnostics",
+        "assistance",
+        "patient",
+        "care",
+        "and"
+      ],
+      "source": "manual-curation",
+      "confidence": 0.83,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "public-health-specialist",
+      "title": "Public Health Specialist",
+      "roleFamily": "hospitality-services",
+      "pathHint": "Epidemiology, community health, policy implementation and prevention programs",
+      "tags": [
+        "public-health-specialist",
+        "epidemiology",
+        "community",
+        "health",
+        "policy",
+        "implementation",
+        "and",
+        "prevention"
+      ],
+      "source": "manual-curation",
+      "confidence": 0.83,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "occupational-therapist",
+      "title": "Occupational Therapist",
+      "roleFamily": "technology",
+      "pathHint": "Rehabilitation planning, daily functioning support and patient care pathways",
+      "tags": [
+        "occupational-therapist",
+        "rehabilitation",
+        "planning",
+        "daily",
+        "functioning",
+        "support",
+        "and",
+        "patient"
+      ],
+      "source": "manual-curation",
+      "confidence": 0.83,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "speech-therapist",
+      "title": "Speech Therapist",
+      "roleFamily": "finance",
+      "pathHint": "Communication therapy, speech correction, pediatric and clinical intervention",
+      "tags": [
+        "speech-therapist",
+        "communication",
+        "therapy",
+        "speech",
+        "correction",
+        "pediatric",
+        "and",
+        "clinical"
+      ],
+      "source": "manual-curation",
+      "confidence": 0.83,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "medical-lab-technologist",
+      "title": "Medical Lab Technologist",
+      "roleFamily": "finance",
+      "pathHint": "Diagnostics labs, sample analysis, quality standards and reporting systems",
+      "tags": [
+        "medical-lab-technologist",
+        "diagnostics",
+        "labs",
+        "sample",
+        "analysis",
+        "quality",
+        "standards",
+        "and"
+      ],
+      "source": "manual-curation",
+      "confidence": 0.83,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "biomedical-engineer",
+      "title": "Biomedical Engineer",
+      "roleFamily": "finance",
+      "pathHint": "Medical devices, instrumentation, healthcare systems and engineering integration",
+      "tags": [
+        "biomedical-engineer",
+        "medical",
+        "devices",
+        "instrumentation",
+        "healthcare",
+        "systems",
+        "and",
+        "engineering"
+      ],
+      "source": "manual-curation",
+      "confidence": 0.83,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "corporate-lawyer",
+      "title": "Corporate Lawyer",
+      "roleFamily": "law-governance",
+      "pathHint": "Contracts, compliance, mergers, legal drafting and business law practice",
+      "tags": [
+        "corporate-lawyer",
+        "contracts",
+        "compliance",
+        "mergers",
+        "legal",
+        "drafting",
+        "and",
+        "business"
+      ],
+      "source": "manual-curation",
+      "confidence": 0.83,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "criminal-lawyer",
+      "title": "Criminal Lawyer",
+      "roleFamily": "law-governance",
+      "pathHint": "Litigation, court practice, legal research and client representation",
+      "tags": [
+        "criminal-lawyer",
+        "litigation",
+        "court",
+        "practice",
+        "legal",
+        "research",
+        "and",
+        "client"
+      ],
+      "source": "manual-curation",
+      "confidence": 0.83,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "legal-analyst",
+      "title": "Legal Analyst",
+      "roleFamily": "finance",
+      "pathHint": "Case research, compliance documents, legal summaries and advisory support",
+      "tags": [
+        "legal-analyst",
+        "case",
+        "research",
+        "compliance",
+        "documents",
+        "legal",
+        "summaries",
+        "and"
+      ],
+      "source": "manual-curation",
+      "confidence": 0.83,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "patent-attorney",
+      "title": "Patent Attorney",
+      "roleFamily": "finance",
+      "pathHint": "IP law, technical writing, innovation protection and legal prosecution workflows",
+      "tags": [
+        "patent-attorney",
+        "law",
+        "technical",
+        "writing",
+        "innovation",
+        "protection",
+        "and",
+        "legal"
+      ],
+      "source": "manual-curation",
+      "confidence": 0.83,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "ux-researcher",
+      "title": "UX Researcher",
+      "roleFamily": "design-creative",
+      "pathHint": "User interviews, usability studies, behavior analysis and product insights",
+      "tags": [
+        "ux-researcher",
+        "user",
+        "interviews",
+        "usability",
+        "studies",
+        "behavior",
+        "analysis",
+        "and"
+      ],
+      "source": "manual-curation",
+      "confidence": 0.83,
+      "stageFit": [
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "motion-designer",
+      "title": "Motion Designer",
+      "roleFamily": "finance",
+      "pathHint": "Animation, storytelling, visual systems and digital brand communication",
+      "tags": [
+        "motion-designer",
+        "animation",
+        "storytelling",
+        "visual",
+        "systems",
+        "and",
+        "digital",
+        "brand"
+      ],
+      "source": "manual-curation",
+      "confidence": 0.83,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "industrial-designer",
+      "title": "Industrial Designer",
+      "roleFamily": "finance",
+      "pathHint": "Product design, ergonomics, materials, prototyping and manufacturing fit",
+      "tags": [
+        "industrial-designer",
+        "product",
+        "design",
+        "ergonomics",
+        "materials",
+        "prototyping",
+        "and",
+        "manufacturing"
+      ],
+      "source": "manual-curation",
+      "confidence": 0.83,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "game-artist",
+      "title": "Game Artist",
+      "roleFamily": "exploration",
+      "pathHint": "2D/3D art, visual assets, style consistency and production collaboration",
+      "tags": [
+        "game-artist",
+        "art",
+        "visual",
+        "assets",
+        "style",
+        "consistency",
+        "and",
+        "production"
+      ],
+      "source": "manual-curation",
+      "confidence": 0.83,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "brand-strategist",
+      "title": "Brand Strategist",
+      "roleFamily": "technology",
+      "pathHint": "Market positioning, messaging frameworks, campaigns and growth storytelling",
+      "tags": [
+        "brand-strategist",
+        "market",
+        "positioning",
+        "messaging",
+        "frameworks",
+        "campaigns",
+        "and",
+        "growth"
+      ],
+      "source": "manual-curation",
+      "confidence": 0.83,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "operations-manager",
+      "title": "Operations Manager",
+      "roleFamily": "business-management",
+      "pathHint": "Process optimization, team coordination, delivery efficiency and execution control",
+      "tags": [
+        "operations-manager",
+        "process",
+        "optimization",
+        "team",
+        "coordination",
+        "delivery",
+        "efficiency",
+        "and"
+      ],
+      "source": "manual-curation",
+      "confidence": 0.83,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "supply-chain-analyst",
+      "title": "Supply Chain Analyst",
+      "roleFamily": "technology",
+      "pathHint": "Procurement, logistics, forecasting, inventory systems and analytics",
+      "tags": [
+        "supply-chain-analyst",
+        "procurement",
+        "logistics",
+        "forecasting",
+        "inventory",
+        "systems",
+        "and",
+        "analytics"
+      ],
+      "source": "manual-curation",
+      "confidence": 0.83,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "sales-manager",
+      "title": "Sales Manager",
+      "roleFamily": "design-creative",
+      "pathHint": "Pipeline management, client acquisition, target achievement and team leadership",
+      "tags": [
+        "sales-manager",
+        "pipeline",
+        "management",
+        "client",
+        "acquisition",
+        "target",
+        "achievement",
+        "and"
+      ],
+      "source": "manual-curation",
+      "confidence": 0.83,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "digital-growth-manager",
+      "title": "Digital Growth Manager",
+      "roleFamily": "technology",
+      "pathHint": "Funnel optimization, paid ads, analytics and growth experimentation",
+      "tags": [
+        "digital-growth-manager",
+        "funnel",
+        "optimization",
+        "paid",
+        "ads",
+        "analytics",
+        "and",
+        "growth"
+      ],
+      "source": "manual-curation",
+      "confidence": 0.83,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "civil-engineer-structures",
+      "title": "Civil Engineer (Structures)",
+      "roleFamily": "engineering-core",
+      "pathHint": "Structural design, construction standards, site coordination and safety checks",
+      "tags": [
+        "civil-engineer-structures",
+        "structural",
+        "design",
+        "construction",
+        "standards",
+        "site",
+        "coordination",
+        "and"
+      ],
+      "source": "manual-curation",
+      "confidence": 0.83,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "electrical-engineer-power-systems",
+      "title": "Electrical Engineer (Power Systems)",
+      "roleFamily": "technology",
+      "pathHint": "Power distribution, grid systems, maintenance and industrial reliability",
+      "tags": [
+        "electrical-engineer-power-systems",
+        "power",
+        "distribution",
+        "grid",
+        "systems",
+        "maintenance",
+        "and",
+        "industrial"
+      ],
+      "source": "manual-curation",
+      "confidence": 0.83,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "embedded-systems-engineer",
+      "title": "Embedded Systems Engineer",
+      "roleFamily": "finance",
+      "pathHint": "Microcontrollers, firmware, electronics integration and hardware debugging",
+      "tags": [
+        "embedded-systems-engineer",
+        "microcontrollers",
+        "firmware",
+        "electronics",
+        "integration",
+        "and",
+        "hardware",
+        "debugging"
+      ],
+      "source": "manual-curation",
+      "confidence": 0.83,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "mechatronics-engineer",
+      "title": "Mechatronics Engineer",
+      "roleFamily": "finance",
+      "pathHint": "Automation systems, sensors, controls, mechanical-electrical integration",
+      "tags": [
+        "mechatronics-engineer",
+        "automation",
+        "systems",
+        "sensors",
+        "controls",
+        "mechanical-electrical",
+        "integration"
+      ],
+      "source": "manual-curation",
+      "confidence": 0.83,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "renewable-energy-engineer",
+      "title": "Renewable Energy Engineer",
+      "roleFamily": "technology",
+      "pathHint": "Solar/wind systems, energy optimization and sustainability deployment",
+      "tags": [
+        "renewable-energy-engineer",
+        "solar",
+        "wind",
+        "systems",
+        "energy",
+        "optimization",
+        "and",
+        "sustainability"
+      ],
+      "source": "manual-curation",
+      "confidence": 0.83,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "data-engineer",
+      "title": "Data Engineer",
+      "roleFamily": "technology",
+      "pathHint": "ETL pipelines, warehousing, distributed processing and data platform reliability",
+      "tags": [
+        "data-engineer",
+        "etl",
+        "pipelines",
+        "warehousing",
+        "distributed",
+        "processing",
+        "and",
+        "data"
+      ],
+      "source": "manual-curation",
+      "confidence": 0.83,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    },
+    {
+      "id": "cloud-security-engineer",
+      "title": "Cloud Security Engineer",
+      "roleFamily": "technology",
+      "pathHint": "Cloud hardening, IAM, threat prevention and compliance architecture",
+      "tags": [
+        "cloud-security-engineer",
+        "cloud",
+        "hardening",
+        "iam",
+        "threat",
+        "prevention",
+        "and",
+        "compliance"
+      ],
+      "source": "manual-curation",
+      "confidence": 0.83,
+      "stageFit": [
+        "post-12th",
+        "in-college",
+        "post-college"
+      ]
+    }
+  ]
+}
