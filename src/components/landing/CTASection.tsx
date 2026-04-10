@@ -1,61 +1,62 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { cn } from "@/utils/helpers";
+import { motion } from 'framer-motion';
+import { ArrowRight, Lock, Zap } from 'lucide-react';
+import Link from 'next/link';
 
-interface CTASectionProps {
-  variant?: "primary" | "secondary";
-}
-
-export default function CTASection({ variant = "primary" }: CTASectionProps) {
-  const isPrimary = variant === "primary";
-
+export default function CTASection() {
   return (
-    <section
-      className={cn(
-        "relative overflow-hidden py-20 sm:py-28",
-        isPrimary ? "bg-transparent" : "bg-gradient-to-b from-black/60 via-[#050515] to-black"
-      )}
-      id={isPrimary ? undefined : "cta-final"}
-    >
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute -left-32 top-0 h-40 w-40 rounded-full bg-violet-500/30 blur-3xl" />
-        <div className="absolute right-0 top-10 h-40 w-40 rounded-full bg-fuchsia-500/25 blur-3xl" />
-        <div className="absolute bottom-0 left-1/2 h-40 w-72 -translate-x-1/2 rounded-full bg-cyan-400/20 blur-3xl" />
+    <section className="relative py-32 overflow-hidden">
+      {/* Background with deep contrast for Scarcity/Urgency */}
+      <div className="absolute inset-0 bg-slate-950">
+        <div className="absolute bottom-0 left-1/2 w-[800px] h-[400px] bg-indigo-600/20 rounded-[100%] blur-[100px] -translate-x-1/2 translate-y-1/2 animate-pulse" />
       </div>
 
-      <div className="relative z-10 mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
-        <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-violet-500/40 bg-violet-500/10 px-4 py-1 text-xs font-semibold text-violet-100">
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-          AI-Powered Career Discovery
-        </div>
+      <div className="relative z-10 max-w-5xl mx-auto px-6 lg:px-8 text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="bg-gradient-to-b from-slate-900 to-slate-950 border border-slate-800 rounded-[3rem] p-12 lg:p-20 shadow-2xl relative overflow-hidden"
+        >
+          {/* Subtle noise overlay */}
+          <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(circle at center, #ffffff 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
 
-        <h2 className="mb-4 text-3xl font-semibold tracking-tight sm:text-4xl md:text-5xl">
-          <span className="bg-gradient-to-r from-violet-300 via-fuchsia-300 to-amber-200 bg-clip-text text-transparent">
-            Your career journey starts here
-          </span>
-        </h2>
+          {/* SCARCITY PRINCIPLE: Beta Access Limits */}
+          <div className="inline-flex items-center justify-center gap-2 px-4 py-1.5 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-400 font-bold uppercase tracking-widest text-xs mb-8 mx-auto">
+            <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping" />
+            Visionary Beta: Only 140 Spots Remaining
+          </div>
 
-        <p className="mx-auto mb-8 max-w-2xl text-sm text-white/70 sm:text-base">
-          Chat with an AI that understands you. Play games that reveal your strengths. Discover careers that genuinely fit who you are.
-        </p>
+          <h2 className="text-4xl md:text-6xl font-black text-white mb-6 tracking-tight">
+            Stop Filtering Through <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">
+              Other People's Expectations.
+            </span>
+          </h2>
+          
+          {/* LIKING & COMMITMENT: Addressing the core cultural pain and asking for a small step */}
+          <p className="text-lg md:text-xl text-slate-400 mb-12 max-w-2xl mx-auto leading-relaxed">
+            The era of choosing careers based on neighbor's advice is over. Join the waitlist for India's first gamified mapping engine before the price triples. 
+          </p>
 
-        <div className="flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
-          <Link
-            href="/roles"
-            className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500 px-8 py-3 text-sm font-semibold shadow-xl shadow-violet-800/40 transition hover:scale-[1.02] hover:from-violet-400 hover:to-fuchsia-400"
-          >
-            Start Your Journey
-          </Link>
-          <a
-            href="#features"
-            className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/5 px-7 py-2.5 text-sm font-medium text-white/80 backdrop-blur-xl transition hover:bg-white/10"
-          >
-            Learn More
-          </a>
-        </div>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Link href="/auth/signup" className="w-full sm:w-auto">
+              <button className="w-full sm:w-auto px-10 py-5 rounded-2xl bg-white text-slate-950 font-black text-lg hover:bg-indigo-50 hover:scale-105 transition-all duration-300 shadow-[0_0_40px_-10px_rgba(255,255,255,0.3)] flex items-center justify-center gap-3">
+                <Zap className="w-5 h-5 fill-current" />
+                Claim Your Free Assessment
+                <ArrowRight className="w-5 h-5" />
+              </button>
+            </Link>
+            
+            <p className="text-slate-500 text-sm mt-4 sm:mt-0 font-medium flex items-center gap-2 bg-slate-900 border border-slate-800 px-4 py-2 rounded-lg">
+              <Lock className="w-4 h-4 text-emerald-400" />
+              256-bit Secure Encryption
+            </p>
+          </div>
+        </motion.div>
       </div>
     </section>
   );
 }
-

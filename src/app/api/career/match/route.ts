@@ -4,6 +4,17 @@ import { careerDatabase } from '@/data/careers';
 import { matchCareers } from '@/lib/careers';
 import { validateStageTransitionGates, shouldHoldStageTransitionForContradictions } from '@/lib/career-engine/stageGates';
 import type { TraitScores, CounselingState } from '@/types';
+import { createServerSupabaseClient } from '@/lib/supabase/server';
+import { gameDefinitions } from '@/data/games';
+import {
+  getOrCreateCounselingSession,
+  logAssessmentEvidence,
+  logGameEvidence,
+  logConstraintEvidence,
+  getUnresolvedContradictions,
+  getEvidenceSummary,
+  saveConstraintProfile
+} from '@/lib/supabase/evidencePersistence';
 
 type ClarityBand = 'low' | 'medium' | 'high';
 type CounselingStage = 'discovery' | 'narrowing' | 'recommendation';
@@ -15,6 +26,11 @@ interface CounselingContext {
   completedGames?: number;
   contradictionsResolved?: boolean;
   constraintsCaptured?: boolean;
+  ageTier?: string;
+  language?: string;
+  riasecResults?: Record<string, number>;
+  gameScores?: Array<{ gameId: string, score: number }>;
+  constraints?: any;
 }
 
 function getClarityBand(context: CounselingContext): ClarityBand {
@@ -94,6 +110,67 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Trait scores required' }, { status: 400 });
     }
 
+    const supabase = createServerSupabaseClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    
+    // Default guest fallback, though auth is preferred
+    const userId = user?.id || '00000000-0000-0000-0000-000000000000';
+
+    let sessionId: string | undefined;
+    let evidenceSummary = {};
+
+    if (counselingContext && user) {
+      const session = await getOrCreateCounselingSession(
+        supabase,
+        userId,
+        counselingContext.ageTier || 'teen',
+        counselingContext.language || 'en'
+      );
+      sessionId = session?.id;
+
+      if (sessionId && counselingContext.riasecResults) {
+        for (const [dimension, score] of Object.entries(counselingContext.riasecResults)) {
+          await logAssessmentEvidence(
+            supabase,
+            userId,
+            sessionId,
+            'riasec',
+            dimension,
+            score as number
+          );
+        }
+      }
+
+      if (sessionId && counselingContext.gameScores && Array.isArray(counselingContext.gameScores)) {
+        for (const gameResult of counselingContext.gameScores) {
+          const GameDefinition = gameDefinitions.find(g => g.id === gameResult.gameId);
+          if (GameDefinition) {
+            await logGameEvidence(
+              supabase,
+              userId,
+              sessionId,
+              gameResult.gameId,
+              gameResult.score,
+              'career-fit',
+              0.15
+            );
+          }
+        }
+      }
+
+      if (counselingContext.constraints) {
+        await saveConstraintProfile(
+          supabase,
+          userId,
+          counselingContext.constraints
+        );
+      }
+
+      if (sessionId) {
+        evidenceSummary = await getEvidenceSummary(supabase, sessionId) || {};
+      }
+    }
+
     const stage = getCounselingStage(counselingContext ?? {});
     const clarityBand = getClarityBand(counselingContext ?? {});
 
@@ -158,7 +235,8 @@ export async function POST(request: NextRequest) {
         counselorMessage: stageMessage + (blockingGatesInfo ? ` [${blockingGatesInfo}]` : ''),
         clusters,
         stageGateStatus: stageGateStatus ?? undefined,
-        phase1_gated: true,  // Indicates that Phase 1 stage gating is active
+        phase1_gated: true,
+        evidenceSummary,
       });
     }
 
@@ -195,6 +273,7 @@ export async function POST(request: NextRequest) {
           ),
         })),
         phase1_gated: true,
+        evidenceSummary,
       });
     }
 
@@ -207,6 +286,7 @@ export async function POST(request: NextRequest) {
       shouldShowNumericConfidence: true,
       matches,
       phase1_gated: true,
+      evidenceSummary,
     });
   } catch (error) {
     console.error('Career match error:', error);

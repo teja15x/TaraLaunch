@@ -2,6 +2,13 @@
 import { createServerSupabaseClient, hasSupabaseServerConfig } from '@/lib/supabase/server';
 import { getChatCompletion } from '@/lib/openai/client';
 import {
+  getOrCreateCounselingSession,
+  logEvidence,
+  logContradiction,
+  resolveContradiction,
+  logConstraintEvidence
+} from '@/lib/supabase/evidencePersistence';
+import {
   buildCareerAgentSystemPrompt,
   getResolvedConversationStyleForLanguage,
   getDefaultScriptPreference,
@@ -352,6 +359,7 @@ export async function POST(request: NextRequest) {
 
     let supabase = null;
     let userId: string | null = null;
+    let sessionId: string | null = null;
     let studentName: string | null = studentIntake?.studentName ?? null;
     let ageTier: AgeTier = 'discoverer';
     let recentMessages: Array<{ role: string; content: string }> = clientHistory.slice(-historyLimit);
@@ -381,6 +389,15 @@ export async function POST(request: NextRequest) {
 
           studentName = profile?.full_name ?? null;
           ageTier = profile?.date_of_birth ? getAgeTier(profile.date_of_birth) : 'discoverer';
+
+          // Initialize counseling session
+          const session = await getOrCreateCounselingSession(
+            supabase,
+            userId,
+            ageTier,
+            preferredLanguage || 'en'
+          );
+          sessionId = session?.id || null;
 
           const { data: storedMessages } = await supabase
             .from('chat_messages')
@@ -490,8 +507,40 @@ export async function POST(request: NextRequest) {
         .map(m => ({ source: 'chat', value: m.content, dimension: 'career_exploration' }));
 
       if (recentUserMessages.length > 1) {
-        const currentSignal = { source: 'chat', value: message, dimension: 'career_exploration' };
+        const currentSignal = { source: 'chat' as const, value: message, dimension: 'career_exploration' };
+
+        if (supabase && userId && sessionId) {
+          try {
+            await logEvidence(
+              supabase,
+              userId,
+              sessionId,
+              {
+                source: 'chat',
+                signal: message,
+                signal_value: 50,
+                weight: 0.03,
+                career_dimension: 'general-interest'
+              }
+            );
+          } catch(e) { console.error('Failed to log evidence:', e); }
+        }
+
         const detectedContradictions = detectContradictions(currentSignal, recentUserMessages);
+
+        if (supabase && userId && sessionId && detectedContradictions.length > 0) {
+          for (const contradiction of detectedContradictions) {
+            try {
+              await logContradiction(
+                supabase,
+                userId,
+                sessionId,
+                contradiction
+              );
+            } catch(e) { console.error('Failed to log contradiction:', e); }
+          }
+        }
+
         unresolvedContradictionsCount = detectedContradictions.length;
         unresolvedHighContradictionsCount = detectedContradictions.filter((item) => item.severity === 'high').length;
 

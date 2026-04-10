@@ -1,195 +1,161 @@
 'use client';
 
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { useRouter } from 'next/navigation';
+import { cn } from '@/utils/helpers';
 
-export default function ResultsPage() {
+export default function StudentResultsPage() {
   const router = useRouter();
 
-  // Mock data - replace with real scores
-  const confidenceScore = 62;
+  // Mock data for the premium student experience
+  const confidenceScore = 92;
+  const traits = {
+    logical: 95,
+    spatial: 85,
+    investigative: 88,
+    enterprising: 70,
+    realistic: 60
+  };
 
   const getConfidenceState = (score: number) => {
-    if (score >= 75) return { label: 'Confident Path', emoji: '✅', color: 'from-emerald-600 to-emerald-700', status: 'Full Access' };
-    if (score >= 50) return { label: 'Building Clarity', emoji: '⚡', color: 'from-amber-600 to-amber-700', status: 'Basic Access' };
-    return { label: 'Early Stage', emoji: '🎮', color: 'from-yellow-600 to-orange-700', status: 'Limited Access' };
+    if (score >= 80) return { label: 'Crystal Clear', emoji: '💎', color: 'from-cyan-500 to-blue-600', status: 'Full Unlock' };
+    if (score >= 50) return { label: 'Taking Shape', emoji: '⚡', color: 'from-purple-500 to-indigo-600', status: 'Core Modes' };
+    return { label: 'Scanning...', emoji: '🔍', color: 'from-slate-600 to-slate-800', status: 'Basic Access' };
   };
 
   const state = getConfidenceState(confidenceScore);
-  const gamesNeeded = Math.ceil((50 - confidenceScore) / 10);
 
   return (
-    <div className="max-w-6xl mx-auto space-y-8 pb-8">
-      {/* Header */}
-      <div>
-        <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">Results Studio</h1>
-        <p className="text-white/70">
-          Your career insights unlock based on confidence. Play more games to refine your predictions.
-        </p>
+    <div className="max-w-6xl mx-auto px-4 pb-24 pt-8 font-sans">
+      
+      {/* Header Profile Section */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6 relative z-10">
+        <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold uppercase tracking-widest mb-4">
+            <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
+            AI Engine Syncing
+          </div>
+          <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight mb-2">
+            Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">Career Genesis</span>
+          </h1>
+          <p className="text-lg text-slate-400">
+            Here are the traits we've discovered while you were gaming.
+          </p>
+        </motion.div>
+        
+        <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} className="flex items-center gap-4 bg-slate-900 border border-slate-800 p-4 rounded-2xl">
+          <div className="text-right">
+            <div className="text-sm font-medium text-slate-400">AI Confidence Map</div>
+            <div className="text-xl font-bold text-white flex items-center justify-end gap-2">
+              {state.label} {state.emoji}
+            </div>
+          </div>
+          <div className={`w-16 h-16 rounded-full flex items-center justify-center bg-gradient-to-b ${state.color} shadow-lg shadow-blue-500/20`}>
+            <span className="text-xl font-bold text-white">{confidenceScore}%</span>
+          </div>
+        </motion.div>
       </div>
 
-      {/* Confidence Gate Explanation */}
-      <Card className={`bg-gradient-to-br ${state.color} border-white/30 p-6 space-y-6`}>
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <div className="flex items-center gap-3 mb-2">
-              <span className="text-4xl">{state.emoji}</span>
-              <div>
-                <p className="text-sm text-white/80 uppercase tracking-wider">Your Prediction Status</p>
-                <h2 className="text-3xl font-bold text-white">{state.label}</h2>
-              </div>
-            </div>
-            <p className="text-white/90 mt-2">
-              Your confidence score is {confidenceScore}%. Based on your game performance and choices, we show you:
-            </p>
-          </div>
-          <div className="text-right min-w-fit">
-            <p className="text-5xl font-bold text-white/80">{confidenceScore}%</p>
-            <p className="text-sm text-white/70 mt-1">Confidence</p>
-          </div>
-        </div>
-
-        {/* Access Level */}
-        <div className="rounded-lg bg-white/10 border border-white/20 p-4">
-          <p className="text-xs uppercase tracking-wider text-white/70 mb-2">Your Current Access</p>
-          <p className="text-lg font-bold text-white">{state.status}</p>
-          <p className="text-sm text-white/80 mt-2">
-            {confidenceScore >= 75
-              ? '🎉 You can now explore all career matches, college pathways, and personalized action plans.'
-              : confidenceScore >= 50
-                ? '📊 You can see basic career matches. Play 1-2 more games to unlock premium insights.'
-                : '🎮 Keep playing games! Each one unlocks more career matches and personalized pathways.'}
-          </p>
-        </div>
-      </Card>
-
-      {/* Confidence Unlock Roadmap */}
-      <section className="space-y-3">
-        <h2 className="text-2xl font-bold text-white">🗺️ Your Path to Full Unlock</h2>
-        <Card className="bg-white/5 border-white/10 p-6">
-          <div className="space-y-4">
-            {[
-              {
-                score: 0,
-                label: 'Early Stage',
-                access: ['Profile setup'],
-                status: 'completed',
-              },
-              {
-                score: 50,
-                label: 'Basic Insights',
-                access: ['3-5 top career matches', 'RIASEC summary', 'Basic action plan'],
-                status: confidenceScore >= 50 ? 'completed' : 'in-progress',
-                needed: confidenceScore < 50 ? `Play ${gamesNeeded} more game${gamesNeeded > 1 ? 's' : ''}` : null,
-              },
-              {
-                score: 75,
-                label: 'Confident Path',
-                access: ['All career matches', 'Detailed college pathways', 'Entrance exam prep', 'Premium guidance'],
-                status: confidenceScore >= 75 ? 'completed' : 'locked',
-                needed: confidenceScore < 75 ? `Play ${Math.ceil((75 - confidenceScore) / 10)} more games` : null,
-              },
-            ].map((milestone) => (
-              <div
-                key={milestone.score}
-                className="rounded-lg border border-white/20 p-4 flex items-start gap-4"
-              >
-                <div className="min-w-fit">
-                  {milestone.status === 'completed' && <span className="text-3xl">✅</span>}
-                  {milestone.status === 'in-progress' && <span className="text-3xl">⚡</span>}
-                  {milestone.status === 'locked' && <span className="text-3xl">🔒</span>}
-                </div>
-                <div className="flex-1">
-                  <div className="flex items-center justify-between gap-2 mb-2">
-                    <h4 className="text-lg font-bold text-white">{milestone.label}</h4>
-                    <span className="text-sm text-white/60">{milestone.score}% confidence</span>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        {/* Left Column: Trait Modalities */}
+        <div className="lg:col-span-2 space-y-8">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
+            <Card className="bg-slate-900/50 border border-slate-800 p-8 rounded-3xl backdrop-blur-xl">
+              <h2 className="text-2xl font-bold text-white mb-8">Neuro-Cognitive Strengths</h2>
+              <div className="space-y-6">
+                {[
+                  { label: 'Logical & Systems Thinking', score: traits.logical, color: 'bg-blue-500' },
+                  { label: 'Spatial Architecture', score: traits.spatial, color: 'bg-cyan-500' },
+                  { label: 'Investigative Drive', score: traits.investigative, color: 'bg-emerald-500' },
+                  { label: 'Enterprising Leadership', score: traits.enterprising, color: 'bg-purple-500' },
+                  { label: 'Realistic Execution', score: traits.realistic, color: 'bg-amber-500' },
+                ].map((item, idx) => (
+                  <div key={item.label}>
+                    <div className="flex justify-between text-sm mb-2">
+                      <span className="text-slate-300 font-medium">{item.label}</span>
+                      <span className="text-white font-bold">{item.score}/100</span>
+                    </div>
+                    <div className="w-full bg-black/50 rounded-full h-3 border border-white/5">
+                      <motion.div 
+                        initial={{ width: 0 }}
+                        animate={{ width: `${item.score}%` }}
+                        transition={{ duration: 1.5, delay: 0.2 + (idx * 0.1), ease: "easeOut" }}
+                        className={`h-full rounded-full ${item.color} relative overflow-hidden`}
+                      >
+                        <div className="absolute inset-0 bg-white/20 w-8 blur-md transform -skew-x-12 animate-[shimmer_2s_infinite]" />
+                      </motion.div>
+                    </div>
                   </div>
-                  <ul className="space-y-1 text-sm text-white/80">
-                    {milestone.access.map((item) => (
-                      <li key={item} className="flex items-center gap-2">
-                        <span className="text-emerald-400">→</span> {item}
-                      </li>
-                    ))}
-                  </ul>
-                  {milestone.needed && (
-                    <p className="text-xs text-white/60 mt-3 font-medium">{milestone.needed}</p>
-                  )}
+                ))}
+              </div>
+            </Card>
+          </motion.div>
+
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
+            <Card className="bg-gradient-to-br from-indigo-900/40 to-slate-900 border border-indigo-500/20 p-8 rounded-3xl">
+              <h3 className="text-xl font-bold text-white mb-6">Top Recommended Vectors</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="bg-black/40 border border-white/5 p-5 rounded-2xl hover:border-indigo-500/40 transition-colors">
+                  <div className="text-indigo-400 text-sm font-bold uppercase tracking-wider mb-2">Primary Match</div>
+                  <div className="text-xl font-bold text-white mb-1">AI Systems Architect</div>
+                  <p className="text-sm text-slate-400">Fits your extreme logical scoring and spatial reasoning from Pattern Master.</p>
+                </div>
+                <div className="bg-black/40 border border-white/5 p-5 rounded-2xl hover:border-purple-500/40 transition-colors">
+                  <div className="text-purple-400 text-sm font-bold uppercase tracking-wider mb-2">Secondary Match</div>
+                  <div className="text-xl font-bold text-white mb-1">Quantitative Analyst</div>
+                  <p className="text-sm text-slate-400">Leverages your high investigative and numbers-driven decision making.</p>
                 </div>
               </div>
-            ))}
-          </div>
-        </Card>
-      </section>
-
-      {/* What to Do Next */}
-      <section className="space-y-3">
-        <h2 className="text-2xl font-bold text-white">📍 What to Do Next</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Card className="bg-gradient-to-br from-primary-600/20 to-accent-600/20 border-primary-500/30 p-6">
-            <h3 className="text-xl font-bold text-white mb-3">🎮 Recommended Next Game</h3>
-            <p className="text-white/80 mb-4">Story Weaver builds verbal reasoning—critical for law and communication roles.</p>
-            <div className="mb-4 p-3 rounded-lg bg-white/10 border border-white/20">
-              <p className="text-sm text-white/70"><strong>Impact:</strong> +10-15% confidence boost</p>
-              <p className="text-sm text-white/70"><strong>Time:</strong> 9-12 minutes</p>
-            </div>
-            <Button onClick={() => router.push('/games/story-weaver')} className="w-full">
-              Play Story Weaver →
-            </Button>
-          </Card>
-
-          <Card className="bg-gradient-to-br from-emerald-600/20 to-teal-600/20 border-emerald-500/30 p-6">
-            <h3 className="text-xl font-bold text-white mb-3">💡 Get Personalized Guidance</h3>
-            <p className="text-white/80 mb-4">Chat with an AI counselor who understands Indian career paths and entrance exam realities.</p>
-            <div className="mb-4 p-3 rounded-lg bg-white/10 border border-white/20">
-              <p className="text-sm text-white/70"><strong>Topics:</strong> Parent pressure, stream choice, plan B's</p>
-              <p className="text-sm text-white/70"><strong>Time:</strong> 5-10 minutes</p>
-            </div>
-            <Button onClick={() => router.push('/chat')} variant="secondary" className="w-full">
-              Open Chat →
-            </Button>
-          </Card>
+            </Card>
+          </motion.div>
         </div>
-      </section>
 
-      {/* FAQ */}
-      <Card className="bg-white/5 border-white/10 p-6 space-y-4">
-        <h3 className="text-lg font-bold text-white">❓ FAQ</h3>
-        <div className="space-y-4 text-sm text-white/80">
-          <div>
-            <h4 className="text-white font-semibold mb-1">Why are some matches locked?</h4>
-            <p>At low confidence (&lt;50%), we show only&apos;s safest matches. As you play games and explore scenarios, your confidence increases&mdash;unlocking more options. This keeps you&apos;s being overwhelmed early on.</p>
-          </div>
-          <div>
-            <h4 className="text-white font-semibold mb-1">Do my friends see these scores?</h4>
-            <p>No. All scores are private. Only you and your parents (if you share) can see them. You&apos;re in control.</p>
-          </div>
-          <div>
-            <h4 className="text-white font-semibold mb-1">Can I retake games to improve my score?</h4>
-            <p>Absolutely. We average your top 2 scores per game. Replay anytime. Better performance &equals; higher confidence.</p>
-          </div>
-          <div>
-            <h4 className="text-white font-semibold mb-1">What if I disagree with my matches?</h4>
-            <p>You're in control. Ignore matches that don't fit. Use the Chat feature to discuss alternatives with a counselor.</p>
-          </div>
-        </div>
-      </Card>
+        {/* Right Column: Next Steps */}
+        <div className="space-y-8">
+          <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 }}>
+            <Card className="bg-slate-900/50 border border-slate-800 p-8 rounded-3xl text-center relative overflow-hidden group">
+              <div className="absolute inset-0 bg-gradient-to-b from-blue-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="w-20 h-20 mx-auto rounded-full bg-blue-500/20 border-2 border-blue-500/50 flex items-center justify-center text-4xl mb-6 relative z-10">
+                🚀
+              </div>
+              <h3 className="text-xl font-bold text-white mb-2 relative z-10">Deploy Next Simulator</h3>
+              <p className="text-sm text-slate-400 mb-6 relative z-10">
+                Your profile needs more data on spontaneous creativity. Play <strong>Story Weaver</strong> to unlock the remaining career pathways.
+              </p>
+              <Button 
+                className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 rounded-xl shadow-lg shadow-blue-500/20 relative z-10"
+                onClick={() => router.push('/games/story-weaver')}
+              >
+                Launch Story Weaver
+              </Button>
+            </Card>
+          </motion.div>
 
-      {/* Call to Action */}
-      <div className="text-center space-y-4">
-        <div className="bg-gradient-to-r from-primary-600/20 to-accent-600/20 border border-primary-500/30 rounded-2xl p-8">
-          <h3 className="text-2xl font-bold text-white mb-2">🚀 Ready to unlock more insights?</h3>
-          <p className="text-white/70 mb-4">
-            {confidenceScore < 50
-              ? `You're ${gamesNeeded} game${gamesNeeded > 1 ? 's' : ''} away from unlocking all basic career matches.`
-              : confidenceScore < 75
-                ? `You're ${Math.ceil((75 - confidenceScore) / 10)} more game${Math.ceil((75 - confidenceScore) / 10) > 1 ? 's' : ''} away from premium insights.`
-                : 'You have access to all insights! Explore your matches and build your action plan.'}
-          </p>
-          <Button onClick={() => router.push('/games')} className="px-8 py-3">
-            Play More Games →
-          </Button>
+          <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.4 }}>
+            <Card className="bg-transparent border border-slate-800 p-8 rounded-3xl">
+              <h3 className="font-bold text-white mb-4">Discovery Metrics</h3>
+              <ul className="space-y-4">
+                <li className="flex justify-between items-center text-sm">
+                  <span className="text-slate-400">Total Playtime</span>
+                  <span className="text-white font-mono">1h 42m</span>
+                </li>
+                <li className="flex justify-between items-center text-sm">
+                  <span className="text-slate-400">Decisions Logged</span>
+                  <span className="text-white font-mono">148</span>
+                </li>
+                <li className="flex justify-between items-center text-sm">
+                  <span className="text-slate-400">Contradictions Found</span>
+                  <span className="text-amber-400 font-mono">2</span>
+                </li>
+              </ul>
+            </Card>
+          </motion.div>
         </div>
+
       </div>
     </div>
   );
