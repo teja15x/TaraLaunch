@@ -14,6 +14,7 @@ This folder contains implementation, setup, and product design notes.
 - `MECHANIC_TO_FEATURE_MAP.md`
 - `UI_UX_ASSESSMENT.md`
 - `UI_RESTRUCTURE_COMPLETE.md`
+- `TARA_FOUNDATION_PACKAGE.md`: V1 PRD + MVP loop + architecture + validation gates
 
 ## Game and Evaluation
 
