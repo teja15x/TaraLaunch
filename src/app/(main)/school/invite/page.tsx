@@ -4,6 +4,7 @@ import { ChangeEvent, useState } from 'react';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { useRouter } from 'next/navigation';
+import type { SchoolInviteResponse } from '@/lib/domain/contracts';
 
 export default function InviteStudents() {
   const [emails, setEmails] = useState('');
@@ -11,7 +12,7 @@ export default function InviteStudents() {
   const [csvFileName, setCsvFileName] = useState('');
   const [schoolCode, setSchoolCode] = useState('');
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<{ success: number; failed: number } | null>(null);
+  const [result, setResult] = useState<SchoolInviteResponse | null>(null);
   const router = useRouter();
 
   const handleBulkInvite = async () => {
@@ -29,10 +30,10 @@ export default function InviteStudents() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ emails: emailList, csvContent }),
       });
-      const data = await res.json();
-      setResult({ success: data.invited || 0, failed: data.failed || 0 });
+      const data = (await res.json()) as SchoolInviteResponse;
+      setResult({ invited: data.invited || 0, failed: data.failed || 0, failures: data.failures || [] });
     } catch {
-      setResult({ success: 0, failed: emailList.length });
+      setResult({ invited: 0, failed: emailList.length, failures: [] });
     } finally {
       setLoading(false);
     }
@@ -100,8 +101,20 @@ export default function InviteStudents() {
         </div>
         {result && (
           <div className="mt-3 p-3 rounded-lg bg-white/5 border border-white/10">
-            <p className="text-emerald-300 text-sm">{result.success} invites sent successfully</p>
+            <p className="text-emerald-300 text-sm">{result.invited} invites sent successfully</p>
             {result.failed > 0 && <p className="text-red-300 text-sm">{result.failed} failed</p>}
+            {result.failures.length > 0 && (
+              <div className="mt-2 text-xs text-white/60 space-y-1">
+                {result.failures.slice(0, 6).map((failure) => (
+                  <p key={`${failure.email}-${failure.reason}`}>
+                    {failure.email}: {failure.reason.replace('_', ' ')}
+                  </p>
+                ))}
+                {result.failures.length > 6 && (
+                  <p>+{result.failures.length - 6} more failures</p>
+                )}
+              </div>
+            )}
           </div>
         )}
       </Card>

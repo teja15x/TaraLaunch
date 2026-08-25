@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/Button';
 import { useAuth } from '@/hooks/useAuth';
 import { cn } from '@/utils/helpers';
 import toast from 'react-hot-toast';
+import type { CreateOrderErrorResponse } from '@/lib/domain/contracts';
 
 declare global {
   interface Window {
@@ -79,7 +80,12 @@ export default function PremiumPricingPage() {
       });
 
       if (!res.ok) {
-        const err = await res.json();
+        const err = (await res.json()) as CreateOrderErrorResponse;
+        if (res.status === 503 && err.mode === 'deferred') {
+          toast('Payments are temporarily deferred in this MVP release.', { icon: 'ℹ️' });
+          setLoading(null);
+          return;
+        }
         toast.error(err.error || 'Failed to create order');
         setLoading(null);
         return;
