@@ -1,9 +1,18 @@
 import { NextResponse } from 'next/server';
 import { createServerSupabaseClient } from '@/lib/supabase/server';
 import { SUBSCRIPTION_PLANS, type PlanId } from '@/lib/razorpay';
+import type { CreateOrderErrorResponse } from '@/lib/domain/contracts';
 
 export async function POST(request: Request) {
   try {
+    if (process.env.ENABLE_RAZORPAY_PAYMENTS !== 'true') {
+      const payload: CreateOrderErrorResponse = {
+        error: 'Payments are currently deferred for this MVP release.',
+        mode: 'deferred',
+      };
+      return NextResponse.json(payload, { status: 503 });
+    }
+
     const supabase = createServerSupabaseClient();
     const { data: { user } } = await supabase.auth.getUser();
 

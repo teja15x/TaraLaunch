@@ -21,6 +21,7 @@ export default function SignupPage() {
   const [dateOfBirth, setDateOfBirth] = useState('');
   const [parentEmail, setParentEmail] = useState('');
   const [parentName, setParentName] = useState('');
+  const [schoolJoinCode, setSchoolJoinCode] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -63,6 +64,7 @@ export default function SignupPage() {
           date_of_birth: dateOfBirth,
           parent_email: parentEmail || undefined,
           parent_name: parentName || undefined,
+          school_join_code: schoolJoinCode.trim().toUpperCase() || undefined,
         },
       },
     });
@@ -203,6 +205,17 @@ export default function SignupPage() {
                 onChange={(e) => setParentName(e.target.value)}
                 className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-primary-500"
                 placeholder="Guardian name"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-primary-100 mb-1">School Join Code (optional)</label>
+              <input
+                type="text"
+                value={schoolJoinCode}
+                onChange={(e) => setSchoolJoinCode(e.target.value)}
+                className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-primary-500 uppercase"
+                placeholder="ABC123"
+                maxLength={12}
               />
             </div>
             <button

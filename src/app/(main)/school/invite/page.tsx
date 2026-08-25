@@ -1,15 +1,18 @@
 'use client';
 
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { useRouter } from 'next/navigation';
+import type { SchoolInviteResponse } from '@/lib/domain/contracts';
 
 export default function InviteStudents() {
   const [emails, setEmails] = useState('');
+  const [csvContent, setCsvContent] = useState('');
+  const [csvFileName, setCsvFileName] = useState('');
   const [schoolCode, setSchoolCode] = useState('');
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<{ success: number; failed: number } | null>(null);
+  const [result, setResult] = useState<SchoolInviteResponse | null>(null);
   const router = useRouter();
 
   const handleBulkInvite = async () => {
@@ -18,19 +21,19 @@ export default function InviteStudents() {
       .map(e => e.trim())
       .filter(e => e.includes('@'));
 
-    if (emailList.length === 0) return;
+    if (emailList.length === 0 && !csvContent.trim()) return;
 
     setLoading(true);
     try {
       const res = await fetch('/api/school/invite', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ emails: emailList }),
+        body: JSON.stringify({ emails: emailList, csvContent }),
       });
-      const data = await res.json();
-      setResult({ success: data.invited || 0, failed: data.failed || 0 });
+      const data = (await res.json()) as SchoolInviteResponse;
+      setResult({ invited: data.invited || 0, failed: data.failed || 0, failures: data.failures || [] });
     } catch {
-      setResult({ success: 0, failed: emailList.length });
+      setResult({ invited: 0, failed: emailList.length, failures: [] });
     } finally {
       setLoading(false);
     }
@@ -45,6 +48,16 @@ export default function InviteStudents() {
       setSchoolCode('ERROR');
     }
   };
+
+  const handleCsvUpload = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    const text = await file.text();
+    setCsvContent(text);
+    setCsvFileName(file.name);
+  };
+
+  const detectedEmailCount = emails.split(/[\n,;]+/).filter(e => e.trim().includes('@')).length;
 
   return (
     <div className="max-w-3xl mx-auto space-y-6">
@@ -66,9 +79,21 @@ export default function InviteStudents() {
           className="w-full bg-white/5 border border-white/20 rounded-xl px-4 py-3 text-white text-sm resize-none focus:outline-none focus:ring-2 focus:ring-purple-500/50 placeholder-white/30 mb-3"
           placeholder="student1@school.edu&#10;student2@school.edu&#10;student3@school.edu"
         />
+        <div className="mb-3">
+          <label className="block text-white/60 text-xs mb-2">Or upload CSV file</label>
+          <input
+            type="file"
+            accept=".csv,text/csv"
+            onChange={handleCsvUpload}
+            className="w-full text-sm text-white/70 file:mr-3 file:rounded-lg file:border-0 file:bg-white/10 file:px-3 file:py-2 file:text-white hover:file:bg-white/20"
+          />
+          {csvFileName && (
+            <p className="text-emerald-300 text-xs mt-2">Loaded: {csvFileName}</p>
+          )}
+        </div>
         <div className="flex items-center justify-between">
           <p className="text-white/40 text-xs">
-            {emails.split(/[\n,;]+/).filter(e => e.trim().includes('@')).length} valid emails detected
+            {detectedEmailCount} typed emails detected{csvFileName ? ' + CSV upload ready' : ''}
           </p>
           <Button onClick={handleBulkInvite} loading={loading}>
             Send Invites
@@ -76,8 +101,20 @@ export default function InviteStudents() {
         </div>
         {result && (
           <div className="mt-3 p-3 rounded-lg bg-white/5 border border-white/10">
-            <p className="text-emerald-300 text-sm">{result.success} invites sent successfully</p>
+            <p className="text-emerald-300 text-sm">{result.invited} invites sent successfully</p>
             {result.failed > 0 && <p className="text-red-300 text-sm">{result.failed} failed</p>}
+            {result.failures.length > 0 && (
+              <div className="mt-2 text-xs text-white/60 space-y-1">
+                {result.failures.slice(0, 6).map((failure) => (
+                  <p key={`${failure.email}-${failure.reason}`}>
+                    {failure.email}: {failure.reason.replace('_', ' ')}
+                  </p>
+                ))}
+                {result.failures.length > 6 && (
+                  <p>+{result.failures.length - 6} more failures</p>
+                )}
+              </div>
+            )}
           </div>
         )}
       </Card>

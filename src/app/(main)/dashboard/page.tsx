@@ -7,13 +7,40 @@ import { motion } from 'framer-motion';
 import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation';
 import { Flame, Target, TrendingUp, Sparkles, BrainCircuit, ChevronRight, CheckCircle2, Lock, ShieldAlert } from 'lucide-react';
+import type { DashboardSummaryResponse } from '@/lib/domain/contracts';
 
 export default function EnhancedDashboardPage() {
   const { profile, loading } = useAuth();
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
+  const [summary, setSummary] = useState<DashboardSummaryResponse>({
+    greetingName: 'Future Leader',
+    currentStreak: 0,
+    xpPoints: 0,
+    clarityScore: 0,
+  });
 
   useEffect(() => setMounted(true), []);
+
+  useEffect(() => {
+    if (!mounted) return;
+    let active = true;
+
+    (async () => {
+      try {
+        const res = await fetch('/api/dashboard/summary', { cache: 'no-store' });
+        if (!res.ok) return;
+        const payload = (await res.json()) as DashboardSummaryResponse;
+        if (active) setSummary(payload);
+      } catch {
+        // Keep defaults on failure.
+      }
+    })();
+
+    return () => {
+      active = false;
+    };
+  }, [mounted]);
 
   if (loading || !mounted) {
     return (
@@ -23,22 +50,13 @@ export default function EnhancedDashboardPage() {
     );
   }
 
-  const firstName = profile?.full_name?.split(' ')[0] || 'Future Leader';
-
-  // Mock Engine Data based on Blueprint
-  const streakDays = [
-    { day: 'Mon', active: true },
-    { day: 'Tue', active: true },
-    { day: 'Wed', active: true },
-    { day: 'Thu', active: true },
-    { day: 'Fri', active: true },
-    { day: 'Sat', active: false, isToday: true },
-    { day: 'Sun', active: false },
-  ];
-
-  const currentStreak = 5;
-  const clarityScore = 68; // Out of 100
-  const xpPoints = 2450;
+  const firstName = profile?.full_name?.split(' ')[0] || summary.greetingName;
+  const todayIndex = (new Date().getDay() + 6) % 7;
+  const streakDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day, idx) => ({
+    day,
+    active: idx < summary.currentStreak,
+    isToday: idx === todayIndex,
+  }));
 
   return (
     <div className="max-w-6xl mx-auto space-y-8 pb-12 pt-4 relative">
@@ -73,12 +91,12 @@ export default function EnhancedDashboardPage() {
         <div className="flex gap-4">
           <Card className="bg-slate-900/50 border-slate-800 p-4 backdrop-blur-xl flex flex-col items-center justify-center min-w-[100px]">
             <Flame className="w-8 h-8 text-orange-500 mb-1 drop-shadow-[0_0_10px_rgba(249,115,22,0.5)]" />
-            <div className="text-2xl font-black text-white">{currentStreak}</div>
+            <div className="text-2xl font-black text-white">{summary.currentStreak}</div>
             <div className="text-xs text-slate-500 font-bold uppercase tracking-wider mt-1">Day Streak</div>
           </Card>
           <Card className="bg-slate-900/50 border-slate-800 p-4 backdrop-blur-xl flex flex-col items-center justify-center min-w-[100px]">
             <BrainCircuit className="w-8 h-8 text-cyan-500 mb-1 drop-shadow-[0_0_10px_rgba(6,182,212,0.5)]" />
-            <div className="text-2xl font-black text-white">{xpPoints}</div>
+            <div className="text-2xl font-black text-white">{summary.xpPoints}</div>
             <div className="text-xs text-slate-500 font-bold uppercase tracking-wider mt-1">XP Earned</div>
           </Card>
         </div>
@@ -224,12 +242,12 @@ export default function EnhancedDashboardPage() {
                     strokeLinecap="round"
                     className="text-indigo-500 drop-shadow-[0_0_10px_rgba(99,102,241,0.5)]"
                     initial={{ strokeDasharray: '0 502' }}
-                    animate={{ strokeDasharray: `${(clarityScore / 100) * 502} 502` }}
+                    animate={{ strokeDasharray: `${(summary.clarityScore / 100) * 502} 502` }}
                     transition={{ duration: 1.5, ease: "easeOut", delay: 0.5 }}
                   />
                 </svg>
                 <div className="absolute inset-0 flex flex-col items-center justify-center">
-                  <span className="text-5xl font-black text-white">{clarityScore}<span className="text-xl text-slate-500">%</span></span>
+                  <span className="text-5xl font-black text-white">{summary.clarityScore}<span className="text-xl text-slate-500">%</span></span>
                   <span className="text-xs text-indigo-400 font-bold uppercase tracking-wider mt-1">Clarity</span>
                 </div>
               </div>
