@@ -4,38 +4,32 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import type { LucideIcon } from 'lucide-react';
 import {
-  BookOpen,
+  BookOpenCheck,
   Bot,
-  ChartNoAxesCombined,
   Compass,
-  Gamepad2,
-  Gem,
   GraduationCap,
-  LayoutDashboard,
+  Home,
   LogOut,
   Menu,
-  School,
-  Target,
+  Route,
+  Swords,
   X,
 } from 'lucide-react';
 import { useAppStore } from '@/store';
 import { useAuth } from '@/hooks/useAuth';
 
 const navItems = [
-  { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/roles', label: 'Roles', icon: Target },
-  { href: '/chat', label: 'Career Agent', icon: Bot },
-  { href: '/games', label: 'Games Lab', icon: Gamepad2 },
-  { href: '/results', label: 'Results', icon: ChartNoAxesCombined },
-  { href: '/guidance', label: 'Guidance', icon: Compass },
-  { href: '/parent', label: 'Parent Zone', icon: BookOpen },
-  { href: '/school', label: 'School Hub', icon: School },
-  { href: '/pricing', label: 'Plans', icon: Gem },
+  { href: '/home', label: 'Home', icon: Home },
+  { href: '/talk', label: 'Talk', icon: Bot },
+  { href: '/explore', label: 'Explore', icon: Compass },
+  { href: '/experience', label: 'Experience', icon: Swords },
+  { href: '/journey', label: 'Journey', icon: Route },
+  { href: '/next', label: 'Next', icon: BookOpenCheck },
 ];
 
 function routeIsActive(pathname: string, href: string) {
   if (pathname === href) return true;
-  return href !== '/dashboard' && pathname.startsWith(`${href}/`);
+  return href !== '/home' && pathname.startsWith(`${href}/`);
 }
 
 function NavLink({
@@ -103,8 +97,8 @@ export function Sidebar() {
               <GraduationCap className="h-5 w-5 text-slate-950" />
             </div>
             <div>
-              <h2 className="font-display text-lg leading-tight text-white">Career Agent</h2>
-              <p className="text-xs text-white/70">Designed for student confidence</p>
+              <h2 className="font-display text-lg leading-tight text-white">Tara</h2>
+              <p className="text-xs text-white/70">Personal Navigation Intelligence</p>
             </div>
           </div>
           {!supabaseConfigured && (

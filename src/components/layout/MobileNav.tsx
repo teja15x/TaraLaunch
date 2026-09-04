@@ -4,26 +4,26 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import type { LucideIcon } from 'lucide-react';
 import {
+  BookOpenCheck,
   Bot,
-  ChartNoAxesCombined,
   Compass,
-  Gamepad2,
+  Route,
   Home,
-  Target,
+  Swords,
 } from 'lucide-react';
 
 const mobileNavItems = [
-  { href: '/dashboard', label: 'Home', icon: Home },
-  { href: '/roles', label: 'Roles', icon: Target },
-  { href: '/chat', label: 'Agent', icon: Bot },
-  { href: '/games', label: 'Games', icon: Gamepad2 },
-  { href: '/results', label: 'Results', icon: ChartNoAxesCombined },
-  { href: '/guidance', label: 'Guide', icon: Compass },
+  { href: '/home', label: 'Home', icon: Home },
+  { href: '/talk', label: 'Talk', icon: Bot },
+  { href: '/explore', label: 'Explore', icon: Compass },
+  { href: '/experience', label: 'Experience', icon: Swords },
+  { href: '/journey', label: 'Journey', icon: Route },
+  { href: '/next', label: 'Next', icon: BookOpenCheck },
 ];
 
 function isActiveRoute(pathname: string, href: string) {
   if (pathname === href) return true;
-  return href !== '/dashboard' && pathname.startsWith(`${href}/`);
+  return href !== '/home' && pathname.startsWith(`${href}/`);
 }
 
 function NavItem({

@@ -1,5 +1,5 @@
-import { ModernLandingExperience } from '@/components/landing/ModernLandingExperience';
+import { TaraOpeningExperience } from '@/components/landing/TaraOpeningExperience';
 
 export default function LandingPage() {
-  return <ModernLandingExperience />;
+  return <TaraOpeningExperience />;
 }

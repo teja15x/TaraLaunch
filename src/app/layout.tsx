@@ -29,11 +29,11 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: {
-    default: "Career Agent - AI-Powered Career Discovery for Students",
-    template: "%s | Career Agent",
+    default: 'Tara - Personal Navigation Intelligence',
+    template: '%s | Tara',
   },
   description:
-    "Discover your ideal career through fun assessment games powered by AI. Based on RIASEC, Gardner's Multiple Intelligences, and personality analysis. Built for Indian students ages 13-21.",
+    "Tara is an AI-powered lifelong personal navigation companion. Talk, experience consequences, reflect, and build evidence for better life and career decisions.",
   keywords: [
     "career guidance",
     "career assessment",
@@ -48,21 +48,21 @@ export const metadata: Metadata = {
     "career games",
     "career buddy",
   ],
-  authors: [{ name: "Career Agent" }],
-  creator: "Career Agent",
+  authors: [{ name: 'TaraLaunch' }],
+  creator: 'Tara',
   openGraph: {
     type: "website",
     locale: "en_IN",
-    siteName: "Career Agent",
-    title: "Career Agent - AI-Powered Career Discovery",
+    siteName: 'Tara',
+    title: 'Tara - Personal Navigation Intelligence',
     description:
-      "Play fun assessment games, chat with an AI Career Buddy, and discover careers that truly match who you are.",
+      'Conversation + experiences + reflection + evidence for meaningful decisions.',
   },
   twitter: {
-    card: "summary_large_image",
-    title: "Career Agent - AI-Powered Career Discovery",
+    card: 'summary_large_image',
+    title: 'Tara - Personal Navigation Intelligence',
     description:
-      "Play fun assessment games, chat with an AI Career Buddy, and discover careers that truly match who you are.",
+      'Conversation + experiences + reflection + evidence for meaningful decisions.',
   },
   robots: {
     index: true,
@@ -86,10 +86,10 @@ export default function RootLayout({
     <html lang="en" className="dark">
       <head>
         <link rel="manifest" href="/manifest.json?v=20260312v2" />
-        <meta name="application-name" content="Career Agent" />
+        <meta name="application-name" content="Tara" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-        <meta name="apple-mobile-web-app-title" content="Career Agent" />
+        <meta name="apple-mobile-web-app-title" content="Tara" />
         <meta httpEquiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
         <meta httpEquiv="Pragma" content="no-cache" />
         <meta httpEquiv="Expires" content="0" />
