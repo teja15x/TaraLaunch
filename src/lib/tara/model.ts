@@ -90,11 +90,17 @@ export function createHypothesisFromEvidence(evidence: EvidenceRecord): Hypothes
 }
 
 export function createTaraMomentFromEvidence(evidence: EvidenceRecord): TaraMoment {
+  const hint = evidence.interpretation.toLowerCase().includes('quality')
+    ? 'quality and trust'
+    : evidence.interpretation.toLowerCase().includes('speed')
+      ? 'speed and momentum'
+      : 'ownership under uncertainty';
+
   return {
     id: createId('moment'),
     createdAt: nowIso(),
     text:
-      `You said you value stability, but in pressure moments you still leaned toward ownership and autonomy. ` +
+      `You said you value stability, but in pressure moments you leaned toward ${hint}. ` +
       `That could be an early signal that independent decision-making matters more to you than predictable structure. ` +
       `It's not a label yet. Want to test this with one real-world conversation?`,
   };

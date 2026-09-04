@@ -1,24 +1,24 @@
 import type { Metadata, Viewport } from "next";
-import { IBM_Plex_Mono, Manrope, Space_Grotesk } from "next/font/google";
+import localFont from 'next/font/local';
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
 
-const manrope = Manrope({
-  subsets: ["latin"],
-  variable: "--font-body",
-  weight: ["400", "500", "600", "700", "800"],
+const taraBodyFont = localFont({
+  src: './fonts/GeistVF.woff',
+  variable: '--font-body',
+  weight: '100 900',
 });
 
-const spaceGrotesk = Space_Grotesk({
-  subsets: ["latin"],
-  variable: "--font-display",
-  weight: ["500", "600", "700"],
+const taraDisplayFont = localFont({
+  src: './fonts/GeistVF.woff',
+  variable: '--font-display',
+  weight: '100 900',
 });
 
-const ibmPlexMono = IBM_Plex_Mono({
-  subsets: ["latin"],
-  variable: "--font-mono",
-  weight: ["400", "500", "600"],
+const taraMonoFont = localFont({
+  src: './fonts/GeistMonoVF.woff',
+  variable: '--font-mono',
+  weight: '100 900',
 });
 
 export const viewport: Viewport = {
@@ -94,7 +94,7 @@ export default function RootLayout({
         <meta httpEquiv="Pragma" content="no-cache" />
         <meta httpEquiv="Expires" content="0" />
       </head>
-      <body className={`${manrope.variable} ${spaceGrotesk.variable} ${ibmPlexMono.variable} font-sans antialiased`}>
+      <body className={`${taraBodyFont.variable} ${taraDisplayFont.variable} ${taraMonoFont.variable} font-sans antialiased`}>
         {children}
         <Toaster position="top-right" toastOptions={{ duration: 3000 }} />
       </body>

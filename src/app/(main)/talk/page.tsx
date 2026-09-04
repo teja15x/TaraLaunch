@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { TaraPageShell } from '@/components/tara/TaraPageShell';
 import { Card } from '@/components/ui/Card';
@@ -29,7 +29,7 @@ export default function TalkPage() {
     markOnboardingComplete: state.markOnboardingComplete,
   }));
 
-  useMemo(() => {
+  useEffect(() => {
     ensureStarterMessage();
   }, [ensureStarterMessage]);
 

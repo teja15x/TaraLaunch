@@ -20,7 +20,6 @@ const nextConfig = {
 
   // Experimental optimizers for caching across regions
   experimental: {
-    optimizeCss: true,
     scrollRestoration: true,
   }
 };
